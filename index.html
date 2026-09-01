@@ -3,43 +3,240 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dr Rasha Clinic | AI Receptionist Demo</title>
+<title>Dr Rasha Clinic — AI Receptionist Demo</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;background:#f8f6f3;color:#2d2926}
-header{background:#fff;padding:22px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e8e2dc}
-.logo{font-family:Georgia,serif;font-size:25px;letter-spacing:1px}
-nav{display:flex;gap:28px;font-size:14px;color:#625b55}
-.hero{min-height:520px;display:flex;align-items:center;padding:70px 8%;background:linear-gradient(110deg,#f7f2ed,#eee7df)}
-.hero-content{max-width:680px}
-.eyebrow{text-transform:uppercase;letter-spacing:3px;font-size:12px;margin-bottom:18px;color:#857466}
-h1{font-family:Georgia,serif;font-size:clamp(42px,6vw,72px);font-weight:normal;line-height:1.05;margin-bottom:24px}
-.hero p{font-size:18px;line-height:1.7;color:#665f59;max-width:560px}
-.button{display:inline-block;margin-top:30px;background:#776554;color:#fff;padding:15px 27px;border-radius:4px;text-decoration:none;font-size:14px}
-.demo-label{position:fixed;top:10px;right:10px;background:#2d2926;color:#fff;padding:7px 11px;border-radius:20px;font-size:10px;z-index:20}
-.chat-button{position:fixed;right:25px;bottom:25px;width:64px;height:64px;border-radius:50%;border:none;background:#776554;color:#fff;font-size:27px;cursor:pointer;box-shadow:0 8px 25px rgba(0,0,0,.18);z-index:10}
-.chat-window{position:fixed;right:25px;bottom:100px;width:390px;max-width:calc(100vw - 30px);height:600px;background:#fff;border-radius:18px;box-shadow:0 15px 50px rgba(0,0,0,.18);display:none;flex-direction:column;overflow:hidden;z-index:9}
-.chat-header{background:#776554;color:#fff;padding:18px;display:flex;align-items:center;gap:12px}
-.avatar{width:42px;height:42px;border-radius:50%;background:#fff;color:#776554;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:bold}
-.chat-title{font-weight:bold;font-size:15px}
-.chat-status{font-size:11px;opacity:.85;margin-top:3px}
-.messages{flex:1;padding:18px;overflow-y:auto;background:#fbfaf8}
-.message{max-width:84%;padding:11px 14px;margin-bottom:12px;border-radius:15px;font-size:14px;line-height:1.55;white-space:pre-line}
-.bot{background:#eee8e1;border-bottom-left-radius:4px}
-.user{background:#776554;color:#fff;margin-left:auto;border-bottom-right-radius:4px}
-.input-area{display:flex;border-top:1px solid #e6e1dc;padding:10px;background:#fff;gap:8px}
-.input-area input{flex:1;border:1px solid #ddd6cf;border-radius:20px;padding:11px 14px;outline:none;font-size:14px}
-.send{width:42px;border:none;border-radius:50%;background:#776554;color:#fff;cursor:pointer}
-@media(max-width:600px){
+:root{
+  --brown:#776554;
+  --dark:#2d2926;
+  --muted:#6d655f;
+  --cream:#f6f1eb;
+  --line:#e8e1da;
+  --white:#fff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--dark);
+  background:#fff;
+}
+header{
+  height:82px;
+  padding:0 7%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  background:#fff;
+  position:relative;
+  z-index:2;
+}
+.logo{
+  font-family:Georgia,serif;
+  font-size:26px;
+  letter-spacing:.5px;
+}
+nav{
+  display:flex;
+  gap:28px;
+  font-size:14px;
+  color:#5d554f;
+}
+.hero{
+  min-height:540px;
+  padding:90px 8%;
+  display:flex;
+  align-items:center;
+  background:linear-gradient(115deg,#f7f2ed,#eee7df);
+}
+.hero-inner{max-width:760px}
+.eyebrow{
+  text-transform:uppercase;
+  letter-spacing:3px;
+  font-size:12px;
+  color:#857466;
+}
+h1{
+  font-family:Georgia,serif;
+  font-size:clamp(44px,7vw,76px);
+  line-height:1.02;
+  font-weight:400;
+  margin:22px 0;
+}
+.hero p{
+  max-width:640px;
+  font-size:19px;
+  line-height:1.7;
+  color:var(--muted);
+}
+.hero-btn{
+  display:inline-block;
+  margin-top:24px;
+  padding:15px 26px;
+  color:#fff;
+  background:var(--brown);
+  text-decoration:none;
+  border-radius:4px;
+}
+.demo{
+  position:fixed;
+  right:10px;
+  top:10px;
+  z-index:20000;
+  background:var(--dark);
+  color:#fff;
+  padding:7px 11px;
+  border-radius:20px;
+  font-size:10px;
+  letter-spacing:.4px;
+}
+
+/* CHAT */
+#chatButton{
+  position:fixed;
+  right:26px;
+  bottom:25px;
+  z-index:10000;
+  width:66px;
+  height:66px;
+  border:0;
+  border-radius:50%;
+  background:var(--brown);
+  color:#fff;
+  font-size:27px;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(0,0,0,.20);
+}
+#chatButton:hover{transform:scale(1.03)}
+#chatWindow{
+  position:fixed;
+  right:26px;
+  bottom:105px;
+  z-index:9999;
+  width:410px;
+  max-width:calc(100vw - 28px);
+  height:650px;
+  max-height:calc(100vh - 125px);
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 18px 60px rgba(0,0,0,.22);
+  overflow:hidden;
+  display:none;
+  flex-direction:column;
+}
+#chatWindow.open{display:flex}
+.chat-header{
+  background:var(--brown);
+  color:#fff;
+  padding:17px 18px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  background:#fff;
+  color:var(--brown);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Georgia,serif;
+  font-weight:bold;
+}
+.chat-title{font-size:15px;font-weight:bold}
+.chat-status{font-size:11px;opacity:.88;margin-top:3px}
+.close-chat{
+  margin-left:auto;
+  background:transparent;
+  color:#fff;
+  border:0;
+  font-size:26px;
+  cursor:pointer;
+}
+#messages{
+  flex:1;
+  overflow-y:auto;
+  padding:19px;
+  background:#fbfaf8;
+}
+.message{
+  max-width:88%;
+  margin:0 0 12px;
+  padding:11px 14px;
+  border-radius:15px;
+  font-size:14px;
+  line-height:1.55;
+  white-space:pre-line;
+}
+.message.bot{
+  background:#eee8e1;
+  border-bottom-left-radius:4px;
+}
+.message.user{
+  background:var(--brown);
+  color:#fff;
+  margin-left:auto;
+  border-bottom-right-radius:4px;
+}
+.typing{opacity:.6;font-style:italic}
+.chat-form{
+  display:flex;
+  gap:8px;
+  padding:10px;
+  border-top:1px solid var(--line);
+  background:#fff;
+}
+#chatInput{
+  flex:1;
+  min-width:0;
+  border:1px solid #ddd5cd;
+  border-radius:22px;
+  padding:12px 14px;
+  font-size:14px;
+  outline:none;
+}
+#chatInput:focus{border-color:var(--brown)}
+.send{
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:50%;
+  background:var(--brown);
+  color:#fff;
+  cursor:pointer;
+  font-size:18px;
+}
+
+/* DEMO CONTENT */
+.info{
+  padding:70px 8%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.card{
+  padding:28px;
+  background:var(--cream);
+  border-radius:8px;
+}
+.card h3{font-family:Georgia,serif;font-size:24px;font-weight:400}
+.card p{line-height:1.6;color:var(--muted)}
+@media(max-width:700px){
   nav{display:none}
-  .chat-window{right:10px;bottom:90px;height:75vh}
-  .chat-button{right:18px;bottom:18px}
+  .info{grid-template-columns:1fr}
+  #chatWindow{right:10px;bottom:90px;height:76vh}
+  #chatButton{right:16px;bottom:16px}
 }
 </style>
 </head>
 
 <body>
-<div class="demo-label">AI RECEPTIONIST DEMO</div>
+
+<div class="demo">AI RECEPTIONIST DEMO</div>
 
 <header>
   <div class="logo">Dr Rasha Clinic</div>
@@ -52,425 +249,905 @@ h1{font-family:Georgia,serif;font-size:clamp(42px,6vw,72px);font-weight:normal;l
 </header>
 
 <section class="hero">
-  <div class="hero-content">
-    <div class="eyebrow">Aesthetic &amp; Skin Clinic</div>
+  <div class="hero-inner">
+    <div class="eyebrow">Aesthetic &amp; Wellness Clinic</div>
     <h1>Your skin.<br>Your confidence.</h1>
-    <p>Discover personalised aesthetic and skin treatments designed around your individual needs.</p>
-    <a href="https://www.drrashaclinic.com/" target="_blank" class="button">Book a consultation</a>
+    <p>
+      Personalised aesthetic, skin, body, hair and wellness treatments
+      in the heart of Knightsbridge, London.
+    </p>
+    <a class="hero-btn" href="https://www.drrashaclinic.com/" target="_blank">
+      Book a consultation
+    </a>
   </div>
 </section>
 
-<button class="chat-button" id="chatButton">💬</button>
+<section class="info">
+  <div class="card">
+    <h3>Knightsbridge</h3>
+    <p>161 Brompton Road, Knightsbridge, London SW3 1EX</p>
+  </div>
+  <div class="card">
+    <h3>Personalised care</h3>
+    <p>Expert practitioners and doctors conduct a comprehensive assessment and create a bespoke treatment plan.</p>
+  </div>
+  <div class="card">
+    <h3>Ask our assistant</h3>
+    <p>Ask about treatments, prices, opening hours, location, consultations, downtime, booking and more.</p>
+  </div>
+</section>
 
-<div class="chat-window" id="chatWindow">
+<button id="chatButton" type="button" aria-label="Open Dr Rasha Clinic Assistant">💬</button>
+
+<div id="chatWindow" aria-label="Dr Rasha Clinic Assistant">
+
   <div class="chat-header">
     <div class="avatar">DR</div>
     <div>
       <div class="chat-title">Dr Rasha Clinic Assistant</div>
       <div class="chat-status">AI Receptionist · Here to help</div>
     </div>
+    <button class="close-chat" id="closeChat" type="button">×</button>
   </div>
 
-  <div class="messages" id="messages">
-    <div class="message bot">Hi 👋 Welcome to Dr Rasha Clinic.
+  <div id="messages"></div>
 
-I can help with information about treatments, skin concerns, consultations, appointments, pricing and the clinic.
-
-What can I help you with today?</div>
-  </div>
-
-  <form class="input-area" id="chatForm">
-    <input id="chatInput" type="text" placeholder="Type your message..." autocomplete="off">
+  <form class="chat-form" id="chatForm">
+    <input
+      id="chatInput"
+      type="text"
+      placeholder="Ask me anything..."
+      autocomplete="off"
+    >
     <button class="send" type="submit">➤</button>
   </form>
+
 </div>
 
 <script>
-/* =========================================================
-   CLINIC INFORMATION
-========================================================= */
+/* ============================================================
+   DR RASHA CLINIC — COMPLETE DEMO KNOWLEDGE BASE
+   ------------------------------------------------------------
+   This is intentionally self-contained.
+   No API key, framework or external AI service is required.
 
-const clinic = {
+   The bot:
+   - answers clinic questions
+   - understands treatments and prices
+   - handles location/opening hours/contact questions
+   - handles common FAQs
+   - handles skin concerns
+   - handles enquiries
+   - asks for name/email/phone/preferred contact method
+   - lets the customer ask a new question during data collection
+   - does NOT display prices unless pricing is requested
+   - has NO quick-reply buttons
+============================================================ */
+
+
+/* ============================================================
+   CLINIC DETAILS
+============================================================ */
+
+const CLINIC = {
   name: "Dr Rasha Clinic",
-  location: "161 Brompton Road, Knightsbridge, London SW3 1EX",
+  address: "161 Brompton Road, Knightsbridge, London SW3 1EX",
   phone: "0203 337 4410",
+  whatsapp: "07780 851111",
   email: "info@drrashaclinic.com",
-  whatsapp: "07787 221 122",
+  website: "https://www.drrashaclinic.com/",
   hours: {
-    Monday: "9am - 7pm",
-    Tuesday: "9am - 8pm",
-    Wednesday: "9am - 7pm",
-    Thursday: "9am - 8pm",
-    Friday: "9am - 7pm",
-    Saturday: "9am - 7pm",
+    Monday: "9AM - 7PM",
+    Tuesday: "9AM - 8PM",
+    Wednesday: "9AM - 7PM",
+    Thursday: "9AM - 8PM",
+    Friday: "9AM - 7PM",
+    Saturday: "9AM - 7PM",
     Sunday: "Closed"
   }
 };
 
-/* =========================================================
-   TREATMENTS + STARTING PRICES
-========================================================= */
 
-const treatments = {
+/* ============================================================
+   TREATMENTS
+   ============================================================ */
 
-  botox: {
-    names: [
+const TREATMENTS = [
+
+  {
+    name: "Anti-Wrinkle Injections",
+    category: "Injectables",
+    price: "£150",
+    aliases: [
       "botox",
       "anti wrinkle",
       "anti-wrinkle",
       "anti wrinkle injections",
       "anti-wrinkle injections",
       "wrinkle injections",
-      "botulinum",
       "botulinum toxin"
     ],
-    title: "Anti-Wrinkle Injections",
-    price: "from £150",
-    answer: "Anti-wrinkle injections use botulinum toxin to temporarily relax targeted muscles, helping reduce the appearance of lines and wrinkles. Treatment is personalised and suitability should be assessed by a qualified practitioner."
+    answer:
+      "Anti-Wrinkle Injections are used to temporarily relax targeted muscles and smooth the appearance of expression lines and wrinkles. Treatment is personalised following assessment by a qualified practitioner."
   },
 
-  gummySmile: {
-    names: ["gummy smile", "gummy smile injections"],
-    title: "Gummy Smile Injections",
-    price: "from £150",
-    answer: "Gummy smile injections can help reduce excessive gum display when smiling by targeting specific muscles. Treatment is personalised following an assessment."
+  {
+    name: "Gummy Smile Injections",
+    category: "Injectables",
+    price: "£150",
+    aliases: [
+      "gummy smile",
+      "gummy smile injections"
+    ],
+    answer:
+      "Gummy Smile Injections are designed to reduce excessive gum display when smiling by targeting specific muscles. Suitability is assessed individually."
   },
 
-  cheekFiller: {
-    names: ["cheek filler", "cheek fillers"],
-    title: "Cheek Filler",
-    price: "from £400",
-    answer: "Cheek filler can be used to restore or enhance volume and definition in the cheeks, with the aim of creating balanced and natural-looking facial contours."
+  {
+    name: "Cheek Filler",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "cheek filler",
+      "cheek fillers"
+    ],
+    answer:
+      "Cheek filler can restore or enhance volume and definition in the cheeks, helping create balanced and natural-looking facial contours."
   },
 
-  chinFiller: {
-    names: ["chin filler", "chin fillers"],
-    title: "Chin Filler",
-    price: "from £400",
-    answer: "Chin filler can be used to improve chin projection, balance facial proportions and refine the profile. Suitability is assessed during consultation."
+  {
+    name: "Chin Filler",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "chin filler",
+      "chin fillers"
+    ],
+    answer:
+      "Chin filler can improve chin projection, refine the profile and create more balanced facial proportions."
   },
 
-  filler: {
-    names: ["dermal filler", "dermal fillers", "filler", "fillers"],
-    title: "Dermal Filler",
-    price: "from £400",
-    answer: "Dermal fillers are personalised injectable treatments that can restore volume, enhance facial contours and create natural-looking results."
+  {
+    name: "Dermal Filler",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "dermal filler",
+      "dermal fillers",
+      "filler",
+      "fillers"
+    ],
+    answer:
+      "Dermal fillers are injectable treatments used to restore volume, enhance facial contours and create natural-looking results. Treatment is tailored to the individual."
   },
 
-  lipFiller: {
-    names: ["lip filler", "lip fillers"],
-    title: "Lip Filler",
-    price: "from £400",
-    answer: "Lip filler can enhance lip volume, shape and definition while aiming for natural-looking results. The amount and treatment approach depend on your individual goals."
+  {
+    name: "Lip Filler",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "lip filler",
+      "lip fillers"
+    ],
+    answer:
+      "Lip filler can enhance lip volume, shape and definition while aiming for natural-looking results. The treatment is tailored to your individual goals."
   },
 
-  noseFiller: {
-    names: ["nose filler", "nose fillers", "non surgical nose"],
-    title: "Nose Filler",
-    price: "from £400",
-    answer: "Non-surgical nose filler can be used to enhance shape and symmetry. Because the nose is a sensitive treatment area, consultation and assessment are important before treatment."
+  {
+    name: "Nose Filler",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "nose filler",
+      "nose fillers",
+      "non surgical nose",
+      "non-surgical nose"
+    ],
+    answer:
+      "Non-surgical nose filler can be used to enhance shape and symmetry. Because the nose is a sensitive treatment area, suitability should be assessed carefully."
   },
 
-  nasolabial: {
-    names: ["nasolabial filler", "nasolabial fillers", "smile line filler", "smile lines filler"],
-    title: "Nasolabial Filler",
-    price: "from £400",
-    answer: "Nasolabial filler can help soften the appearance of lines running from the nose towards the corners of the mouth and restore facial balance."
+  {
+    name: "Nasolabial Filler",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "nasolabial filler",
+      "nasolabial fillers",
+      "smile line filler",
+      "smile lines filler"
+    ],
+    answer:
+      "Nasolabial filler can help soften the appearance of lines running from the nose towards the corners of the mouth and restore facial balance."
   },
 
-  marionette: {
-    names: ["marionette filler", "marionette line filler", "marionette lines"],
-    title: "Marionette Line Filler",
-    price: "from £600",
-    answer: "Marionette line filler can help soften lines around the lower face and mouth area and restore volume where appropriate."
+  {
+    name: "Marionette Line Filler",
+    category: "Injectables",
+    price: "£600",
+    aliases: [
+      "marionette filler",
+      "marionette line filler",
+      "marionette lines"
+    ],
+    answer:
+      "Marionette Line Filler can help soften lines around the lower face and mouth area and restore volume where appropriate."
   },
 
-  tearTrough: {
-    names: ["tear trough", "tear trough filler", "under eye filler", "under eye", "dark circles filler"],
-    title: "Tear Trough Filler",
-    price: "from £450",
-    answer: "Tear trough filler targets hollows beneath the eyes and can help create a more refreshed appearance. This area requires careful assessment to determine suitability."
+  {
+    name: "Tear Trough Filler",
+    category: "Injectables",
+    price: "£450",
+    aliases: [
+      "tear trough",
+      "tear trough filler",
+      "under eye filler",
+      "under-eye filler",
+      "dark circles filler"
+    ],
+    answer:
+      "Tear Trough Filler targets hollows beneath the eyes and can help create a more refreshed appearance. This area requires careful assessment to determine suitability."
   },
 
-  temple: {
-    names: ["temple filler", "temple fillers"],
-    title: "Temple Filler",
-    price: "from £400",
-    answer: "Temple filler can restore volume in hollow or sunken temples and help create a more balanced facial appearance."
+  {
+    name: "Temple Filler",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "temple filler",
+      "temple fillers"
+    ],
+    answer:
+      "Temple filler can restore volume in hollow or sunken temples and help create a more balanced facial appearance."
   },
 
-  profhilo: {
-    names: ["profhilo"],
-    title: "Profhilo",
-    price: "from £800",
-    answer: "Profhilo is a hyaluronic-acid based skin-remodelling treatment designed to improve hydration, skin texture, elasticity and radiance. It also supports collagen and elastin production."
+  {
+    name: "Profhilo",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "profhilo"
+    ],
+    answer:
+      "Profhilo is a hyaluronic-acid based skin-remodelling treatment designed to improve skin tone, texture, hydration, elasticity and radiance. It also supports collagen and elastin production."
   },
 
-  polynucleotides: {
-    names: ["polynucleotides", "polynucleotide", "salmon dna"],
-    title: "Polynucleotides",
-    price: "from £500",
-    answer: "Polynucleotides are a skin-rejuvenation treatment designed to support skin repair, hydration and overall skin quality."
+  {
+    name: "Polynucleotides",
+    category: "Injectables",
+    price: "£400",
+    aliases: [
+      "polynucleotides",
+      "polynucleotide",
+      "salmon dna",
+      "salmon dna treatment"
+    ],
+    answer:
+      "Polynucleotides, also known as Salmon DNA, are a skin-rejuvenation treatment designed to support repair, hydration and revitalisation of the skin."
   },
 
-  exosomes: {
-    names: ["exosomes", "exosome", "exosome therapy"],
-    title: "Exosomes",
-    price: "from £1,000",
-    answer: "Exosome therapy is an advanced skin-rejuvenation treatment designed to support skin regeneration and improve overall skin quality."
+  {
+    name: "Exosomes",
+    category: "Injectables",
+    price: null,
+    aliases: [
+      "exosomes",
+      "exosome",
+      "exosome therapy"
+    ],
+    answer:
+      "Exosome therapy is an advanced skin-rejuvenation treatment designed to support skin regeneration and healing."
   },
 
-  hydrafacial: {
-    names: ["hydrafacial", "hydra facial", "hydra-facial"],
-    title: "HydraFacial",
-    price: "from £125",
-    answer: "HydraFacial is a non-invasive treatment combining cleansing, exfoliation, extraction and hydration. It can help improve skin texture, hydration, radiance and congestion."
+  {
+    name: "HydraFacial",
+    category: "Face & Skin",
+    price: "£125",
+    aliases: [
+      "hydrafacial",
+      "hydra facial",
+      "hydra-facial"
+    ],
+    answer:
+      "HydraFacial is a gentle, non-invasive treatment that deeply cleanses, exfoliates, extracts and hydrates the skin. The clinic customises the treatment around individual skin concerns."
   },
 
-  signatureHydrafacial: {
-    names: ["signature hydrafacial"],
-    title: "Signature HydraFacial",
-    price: "from £125",
-    answer: "The Signature HydraFacial is the clinic's standard HydraFacial option, designed to cleanse, exfoliate, extract and hydrate the skin. It takes around 30 minutes."
+  {
+    name: "Signature HydraFacial",
+    category: "Face & Skin",
+    price: "£125",
+    aliases: [
+      "signature hydrafacial",
+      "signature hydra facial"
+    ],
+    answer:
+      "Signature HydraFacial is the clinic's comprehensive standard HydraFacial treatment. It takes about 30 minutes and focuses on cleansing, exfoliation and hydration."
   },
 
-  deluxeHydrafacial: {
-    names: ["deluxe hydrafacial", "deluxe hydra facial"],
-    title: "Deluxe HydraFacial",
-    price: "from £195",
-    answer: "The Deluxe HydraFacial adds further treatment steps and customisation for specific skin concerns. It takes around 45 minutes."
+  {
+    name: "Deluxe HydraFacial",
+    category: "Face & Skin",
+    price: "£195",
+    aliases: [
+      "deluxe hydrafacial",
+      "deluxe hydra facial"
+    ],
+    answer:
+      "Deluxe HydraFacial extends the standard treatment with additional benefits for specific skin concerns. The session takes about 45 minutes."
   },
 
-  platinumHydrafacial: {
-    names: ["platinum hydrafacial", "platinum hydra facial"],
-    title: "Platinum HydraFacial",
-    price: "from £250",
-    answer: "The Platinum HydraFacial is the most advanced HydraFacial option, with additional personalised steps, boosters and LED therapy. It takes around one hour."
+  {
+    name: "Platinum HydraFacial",
+    category: "Face & Skin",
+    price: "£250",
+    aliases: [
+      "platinum hydrafacial",
+      "platinum hydra facial"
+    ],
+    answer:
+      "Platinum HydraFacial is the clinic's most advanced HydraFacial option. It is a personalised one-hour treatment with specialised serums, boosters and additional steps."
   },
 
-  microneedling: {
-    names: ["microneedling", "micro needling", "micro-needling"],
-    title: "Microneedling",
-    price: "from £295",
-    answer: "Microneedling uses controlled micro-injuries to support collagen production and improve the appearance of skin texture, fine lines and scarring."
+  {
+    name: "Dr Rasha HydraFacial",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "dr rasha hydrafacial",
+      "dr rasha hydra facial"
+    ],
+    answer:
+      "The Dr Rasha HydraFacial combines deep skin cleansing and hydration with collagen-stimulating laser technology to improve skin tone, texture and glow."
   },
 
-  neogen: {
-    names: ["neogen", "neogen plasma", "plasma treatment"],
-    title: "Neogen Plasma",
-    price: "from £400",
-    answer: "Neogen Plasma is an advanced skin-rejuvenation treatment designed to improve skin texture and support skin renewal."
+  {
+    name: "Dr Rasha Gold Lift Facial",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "gold lift",
+      "gold lift facial",
+      "dr rasha gold lift",
+      "dr rasha gold lift facial"
+    ],
+    answer:
+      "The Dr Rasha Gold Lift Facial is the clinic's signature luxury combination treatment, designed to lift, sculpt and rejuvenate the skin using multiple advanced aesthetic technologies in one bespoke session."
   },
 
-  obagi: {
-    names: ["obagi", "obagi blue radiance peel", "blue radiance peel", "blue peel"],
-    title: "Obagi Blue Radiance Peel",
-    price: "from £180",
-    answer: "The Obagi Blue Radiance Peel is designed to refresh the complexion, improve tone and texture and reduce signs of ageing."
+  {
+    name: "AquaGold Facial",
+    category: "Face & Skin",
+    price: "£600",
+    aliases: [
+      "aquagold",
+      "aqua gold",
+      "aquagold facial",
+      "aqua gold facial"
+    ],
+    answer:
+      "AquaGold Facial is designed to rejuvenate and brighten the skin."
   },
 
-  emface: {
-    names: ["emface", "em face"],
-    title: "EMFACE",
-    price: "from £500",
-    answer: "EMFACE is a non-invasive facial treatment focused on lifting, tightening and improving facial contours."
+  {
+    name: "BBL & Moxi Laser",
+    category: "Face & Skin",
+    price: "£750",
+    aliases: [
+      "bbl",
+      "moxi",
+      "bbl moxi",
+      "bbl & moxi",
+      "bbl and moxi",
+      "bbl laser",
+      "moxi laser"
+    ],
+    answer:
+      "BBL & Moxi Laser treatments can target pigmentation, acne scars and signs of ageing to create a fresher, more even-looking complexion."
   },
 
-  aquagold: {
-    names: ["aquagold", "aqua gold", "aquagold facial"],
-    title: "AquaGold Facial",
-    price: "from £600",
-    answer: "The AquaGold Facial is an advanced skin-rejuvenation treatment designed to improve radiance, hydration, skin texture and the appearance of pores."
+  {
+    name: "Cosmelan",
+    category: "Face & Skin",
+    price: "£1000",
+    aliases: [
+      "cosmelan"
+    ],
+    answer:
+      "Cosmelan is a pigmentation-focused treatment designed to reduce the appearance of pigmentation and brighten the complexion."
   },
 
-  cosmelan: {
-    names: ["cosmelan", "pigmentation peel"],
-    title: "Cosmelan",
-    price: "from £1,000",
-    answer: "Cosmelan is a pigmentation-focused treatment designed to improve the appearance of pigmentation and create a more even-looking complexion."
+  {
+    name: "EMFACE",
+    category: "Face & Skin",
+    price: "£500",
+    aliases: [
+      "emface",
+      "em face"
+    ],
+    answer:
+      "EMFACE is a non-invasive facial treatment designed to lift and tighten facial contours for a refreshed appearance."
   },
 
-  bblMoxi: {
-    names: ["bbl moxi", "bbl & moxi", "bbl and moxi", "bbl", "moxi"],
-    title: "BBL & Moxi Laser",
-    price: "from £750",
-    answer: "BBL and Moxi are laser-based aesthetic treatments used for concerns such as pigmentation, acne scarring, uneven tone and signs of ageing."
+  {
+    name: "Exilis",
+    category: "Face & Skin",
+    price: "£400",
+    aliases: [
+      "exilis"
+    ],
+    answer:
+      "Exilis is a non-surgical treatment designed to improve skin firmness and tone and support face or body contouring."
   },
 
-  lymphatic: {
-    names: ["lymphatic drainage", "lymphatic massage", "lymphatic facial massage", "gua sha"],
-    title: "Lymphatic Drainage",
-    price: "from £120",
-    answer: "Lymphatic treatments use gentle massage techniques to encourage lymphatic drainage, reduce puffiness and support facial or body sculpting."
+  {
+    name: "Microneedling",
+    category: "Face & Skin",
+    price: "£295",
+    aliases: [
+      "microneedling",
+      "micro needling",
+      "micro-needling"
+    ],
+    answer:
+      "Microneedling uses controlled micro-injuries to support collagen production and improve the appearance of skin texture and scarring."
   },
 
-  keravive: {
-    names: ["keravive", "scalp hydrafacial", "hair hydrafacial"],
-    title: "HydraFacial Keravive",
-    price: "from £450",
-    answer: "HydraFacial Keravive is a specialised scalp treatment designed to cleanse, nourish and revitalise the scalp and support healthier-looking hair."
+  {
+    name: "Neogen Plasma",
+    category: "Face & Skin",
+    price: "£400",
+    aliases: [
+      "neogen",
+      "neogen plasma",
+      "plasma treatment",
+      "neogen plasma treatment"
+    ],
+    answer:
+      "Neogen Plasma is an advanced skin-rejuvenation treatment designed to improve skin texture and support skin renewal."
   },
 
-  hairMicroneedling: {
-    names: ["hair microneedling", "hair micro needling"],
-    title: "Hair Microneedling",
-    price: "from £450",
-    answer: "Hair microneedling is designed to support follicle health and improve the appearance of hair thickness and growth."
+  {
+    name: "Obagi Blue Radiance Peel",
+    category: "Face & Skin",
+    price: "£180",
+    aliases: [
+      "obagi",
+      "obagi blue radiance peel",
+      "blue radiance peel",
+      "blue peel"
+    ],
+    answer:
+      "The Obagi Blue Radiance Peel is designed to refresh the skin, improve tone and texture, brighten the complexion and reduce signs of ageing."
   },
 
-  laserHairRemoval: {
-    names: ["laser hair removal", "laser hair"],
-    title: "Laser Hair Removal",
-    price: "from £55",
-    answer: "Laser hair removal is offered by the clinic with treatment tailored to the area being treated and individual needs."
+  {
+    name: "Semi-Permanent Make-Up",
+    category: "Face & Beauty",
+    price: "£400",
+    aliases: [
+      "semi permanent makeup",
+      "semi-permanent makeup",
+      "semi permanent make up",
+      "permanent makeup",
+      "permanent make up"
+    ],
+    answer:
+      "Semi-Permanent Make-Up is offered for features including brows, eyes and lips, with the aim of creating defined, long-lasting results."
   },
 
-  emsculpt: {
-    names: ["emsculpt neo", "emsculpt"],
-    title: "EMSCULPT Neo",
-    price: "from £500",
-    answer: "EMSCULPT Neo is a non-invasive body treatment designed to support muscle toning and body contouring."
+  {
+    name: "Sofwave",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "sofwave",
+      "sof wave"
+    ],
+    answer:
+      "Sofwave is used for eyebrow, submental and neck lifting and for reducing the appearance of fine lines and wrinkles."
   },
 
-  exilisBody: {
-    names: ["exilis body", "exilis"],
-    title: "Exilis",
-    price: "from £400",
-    answer: "Exilis is a non-surgical treatment designed to improve skin firmness and support body and facial contouring."
+  {
+    name: "UltraClear",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "ultraclear",
+      "ultra clear"
+    ],
+    answer:
+      "UltraClear is an advanced laser resurfacing treatment designed to rejuvenate skin and reduce fine lines, wrinkles and sun damage with minimal discomfort and downtime."
   },
 
-  hydrafacialBack: {
-    names: ["hydrafacial back", "back hydrafacial", "hydrafacial for back"],
-    title: "HydraFacial Back Treatment",
-    price: "from £450",
-    answer: "The HydraFacial Back Treatment provides deep cleansing, exfoliation and hydration for the skin on the back."
+  {
+    name: "XERF / XERFWave",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "xerf",
+      "xerfwave",
+      "xerf wave"
+    ],
+    answer:
+      "XERFWave is the clinic's protocol combining XERF with Sofwave. It is described as providing firmer, lifted and refreshed-looking skin without surgery, needles or downtime."
   },
 
-  nonSurgicalBBL: {
-    names: ["non surgical bbl", "non-surgical bbl", "non surgical brazilian butt lift"],
-    title: "Non-Surgical BBL",
-    price: "from £2,000",
-    answer: "The clinic offers a non-surgical BBL designed to enhance curves and create a fuller, more contoured appearance without surgery."
+  {
+    name: "LED Dermalux Tri-Wave MD Phototherapy",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "dermalux",
+      "led dermalux",
+      "led phototherapy",
+      "tri-wave",
+      "tri wave"
+    ],
+    answer:
+      "Dermalux LED Phototherapy is a non-invasive treatment using clinically established wavelengths of light to support skin repair and restore natural radiance."
   },
 
-  dermamelan: {
-    names: ["dermamelan", "dermamelan intimate peel", "intimate peel"],
-    title: "Dermamelan Intimate Peel",
-    price: "from £1,800",
-    answer: "The Dermamelan Intimate Peel is designed to brighten and rejuvenate pigmentation in intimate and sensitive areas."
+  {
+    name: "LDM Skin Rejuvenation",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "ldm",
+      "local dynamic micro massage",
+      "local dynamic micro-massage"
+    ],
+    answer:
+      "LDM (Local Dynamic Micro-Massage) is a non-invasive treatment designed to deeply hydrate, strengthen and rejuvenate the skin without downtime."
   },
 
-  handRejuvenation: {
-    names: ["hand rejuvenation", "hands rejuvenation"],
-    title: "Hand Rejuvenation",
-    price: "from £600",
-    answer: "Hand rejuvenation treatments are designed to improve the appearance of the hands and reduce visible signs of ageing."
+  {
+    name: "Lymphatic Facial Massage",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "lymphatic facial massage",
+      "facial lymphatic massage",
+      "gua sha"
+    ],
+    answer:
+      "Lymphatic Facial Massage combines gentle manual massage with gua sha techniques to encourage lymphatic drainage, reduce puffiness and sculpt facial contours."
   },
 
-  semiPermanent: {
-    names: ["semi permanent makeup", "semi-permanent makeup", "permanent makeup"],
-    title: "Semi-Permanent Make-Up",
-    price: "from £800",
-    answer: "The clinic offers semi-permanent make-up for areas including brows, eyes and lips."
+  {
+    name: "Mesotherapy",
+    category: "Face & Skin",
+    price: null,
+    aliases: [
+      "mesotherapy",
+      "meso therapy"
+    ],
+    answer:
+      "Mesotherapy uses tailored injections to target concerns such as fine lines, dehydration and dullness."
   },
 
-  ldm: {
-    names: ["ldm", "local dynamic micro massage", "local dynamic micro-massage"],
-    title: "LDM Skin Rejuvenation",
-    price: "from £250",
-    answer: "LDM, or Local Dynamic Micro-Massage, is a non-invasive skin treatment designed to hydrate, strengthen and rejuvenate the skin."
+  {
+    name: "HydraFacial Keravive",
+    category: "Hair",
+    price: null,
+    aliases: [
+      "keravive",
+      "hydrafacial keravive",
+      "scalp hydrafacial",
+      "hair hydrafacial"
+    ],
+    answer:
+      "HydraFacial Keravive is a specialised scalp treatment designed to cleanse, nourish and revitalise the scalp and support healthier-looking hair."
+  },
+
+  {
+    name: "Hair Microneedling",
+    category: "Hair",
+    price: "£450",
+    aliases: [
+      "hair microneedling",
+      "hair micro needling"
+    ],
+    answer:
+      "Hair Microneedling is designed to support follicle health and improve the appearance of hair thickness and growth."
+  },
+
+  {
+    name: "Laser Hair Removal",
+    category: "Hair",
+    price: null,
+    aliases: [
+      "laser hair removal",
+      "laser hair"
+    ],
+    answer:
+      "Laser Hair Removal is available with treatment tailored to the area and individual needs."
+  },
+
+  {
+    name: "Exilis Body",
+    category: "Body",
+    price: "£400",
+    aliases: [
+      "exilis body",
+      "body exilis"
+    ],
+    answer:
+      "Exilis Body uses radiofrequency technology for non-surgical body contouring and skin tightening."
+  },
+
+  {
+    name: "EMSCULPT Neo",
+    category: "Body",
+    price: "£500",
+    aliases: [
+      "emsculpt",
+      "emsculpt neo",
+      "em sculpt"
+    ],
+    answer:
+      "EMSCULPT Neo combines muscle toning and fat reduction for non-invasive body sculpting."
+  },
+
+  {
+    name: "Lymphatic Drainage",
+    category: "Body",
+    price: null,
+    aliases: [
+      "lymphatic drainage",
+      "lymphatic massage"
+    ],
+    answer:
+      "Lymphatic Drainage uses gentle techniques to encourage lymphatic drainage and support a less puffy, more sculpted appearance."
+  },
+
+  {
+    name: "HydraFacial Back Treatment",
+    category: "Body",
+    price: null,
+    aliases: [
+      "hydrafacial back",
+      "back hydrafacial",
+      "hydrafacial for back"
+    ],
+    answer:
+      "HydraFacial Back Treatment provides deep cleansing, exfoliation and hydration for the skin on the back."
+  },
+
+  {
+    name: "Hand Rejuvenation",
+    category: "Body",
+    price: null,
+    aliases: [
+      "hand rejuvenation",
+      "hands rejuvenation"
+    ],
+    answer:
+      "Hand Rejuvenation treatments are designed to improve the appearance of the hands and reduce visible signs of ageing."
+  },
+
+  {
+    name: "Non-Surgical BBL",
+    category: "Body",
+    price: null,
+    aliases: [
+      "non surgical bbl",
+      "non-surgical bbl",
+      "non surgical brazilian butt lift"
+    ],
+    answer:
+      "The clinic offers a non-surgical BBL designed to enhance curves and create a fuller, more contoured appearance without surgery."
+  },
+
+  {
+    name: "Dermamelan Intimate Peel",
+    category: "Body",
+    price: "£1800",
+    aliases: [
+      "dermamelan",
+      "dermamelan intimate peel",
+      "intimate peel"
+    ],
+    answer:
+      "Dermamelan Intimate Peel is designed to brighten and rejuvenate pigmentation in sensitive intimate areas."
+  },
+
+  {
+    name: "NAD+ Therapy",
+    category: "Wellness",
+    price: null,
+    aliases: [
+      "nad",
+      "nad+",
+      "nad therapy",
+      "nad+ therapy"
+    ],
+    answer:
+      "NAD+ is a coenzyme naturally present in cells and involved in energy production, cellular repair and metabolism. The clinic offers NAD+ Therapy as part of its wellness offering."
   }
+
+];
+
+
+/* ============================================================
+   CONCERNS / CONDITIONS
+============================================================ */
+
+const CONCERNS = [
+
+  {
+    aliases:["acne"],
+    name:"Acne",
+    price:"£400",
+    answer:"The clinic lists Acne as a concern and publishes treatments from £400 for the concern category. The appropriate approach depends on the individual's skin and the cause of the acne."
+  },
+
+  {
+    aliases:["acne scarring","acne scars"],
+    name:"Acne Scarring",
+    price:"£400",
+    answer:"The clinic lists Acne Scarring as a concern and publishes treatments from £400 for the concern category. Skin-rejuvenation options may be considered depending on the type and severity of scarring."
+  },
+
+  {
+    aliases:["dull skin","dullness","tired skin","lack of glow"],
+    name:"Dull Skin",
+    price:"£400",
+    answer:"The clinic lists Dull Skin as a concern and publishes treatments from £400 for the concern category. Treatments can focus on hydration, texture and radiance."
+  },
+
+  {
+    aliases:["enlarged pores","large pores","pores"],
+    name:"Enlarged Pores",
+    price:"£400",
+    answer:"The clinic lists Enlarged Pores as a concern and publishes treatments from £400 for the concern category. The best option depends on the skin assessment."
+  },
+
+  {
+    aliases:["excess sweating","hyperhidrosis","excessive sweating"],
+    name:"Excess Sweating / Hyperhidrosis",
+    price:"£400",
+    answer:"The clinic lists Excess Sweating / Hyperhidrosis as a concern and publishes treatments from £400 for the concern category."
+  },
+
+  {
+    aliases:["hair loss","thinning hair","hair thinning"],
+    name:"Hair Loss",
+    price:null,
+    answer:"The clinic has a Hair Loss concern category. It also offers hair and scalp treatments including HydraFacial Keravive and Hair Microneedling. A consultation helps determine the most appropriate option."
+  },
+
+  {
+    aliases:["pigmentation","hyperpigmentation","dark spots","uneven skin tone","uneven tone","melasma"],
+    name:"Pigmentation",
+    price:null,
+    answer:"For pigmentation concerns, the clinic offers options including Cosmelan, BBL & Moxi, Obagi Blue Radiance Peel and other skin-rejuvenation treatments. The most appropriate option depends on the individual's skin."
+  },
+
+  {
+    aliases:["wrinkles","fine lines","crow's feet","forehead lines","ageing","aging"],
+    name:"Wrinkles & Fine Lines",
+    price:null,
+    answer:"For wrinkles and fine lines, the clinic offers options including Anti-Wrinkle Injections, Dermal Fillers, Profhilo, Microneedling, EMFACE, Sofwave and other rejuvenation treatments. Suitability depends on the individual."
+  },
+
+  {
+    aliases:["sun damage","sun damaged skin"],
+    name:"Sun Damage",
+    price:null,
+    answer:"The clinic offers advanced skin treatments for concerns such as sun damage, including laser and resurfacing options. A consultation can determine which approach is appropriate."
+  },
+
+  {
+    aliases:["rosacea"],
+    name:"Rosacea",
+    price:null,
+    answer:"The clinic lists Rosacea among its skin concerns. Treatment should be selected after assessment because triggers and skin sensitivity vary between individuals."
+  },
+
+  {
+    aliases:["stretch marks","stretchmark","stretchmarks"],
+    name:"Stretch Marks",
+    price:null,
+    answer:"The clinic lists Stretch Marks among its concerns and can assess the skin to determine an appropriate treatment approach."
+  }
+
+];
+
+
+/* ============================================================
+   UI STATE
+============================================================ */
+
+let lastTreatment = null;
+let leadStage = null;
+
+const customer = {
+  name:"",
+  email:"",
+  phone:"",
+  preferredContactMethod:"",
+  treatment:"",
+  originalEnquiry:""
 };
-
-/* =========================================================
-   CUSTOMER + CHAT STATE
-========================================================= */
-
-let customer = {
-  name: "",
-  email: "",
-  phone: "",
-  treatment: "",
-  originalMessage: "",
-  preferredContactMethod: ""
-};
-
-let stage = "chat";
-let lastTopic = "";
-
-/* =========================================================
-   UI
-========================================================= */
 
 const chatButton = document.getElementById("chatButton");
 const chatWindow = document.getElementById("chatWindow");
+const closeChat = document.getElementById("closeChat");
 const messages = document.getElementById("messages");
 const chatForm = document.getElementById("chatForm");
 const chatInput = document.getElementById("chatInput");
 
-chatButton.addEventListener("click", function() {
-  chatWindow.style.display =
-    chatWindow.style.display === "flex" ? "none" : "flex";
 
-  if (chatWindow.style.display === "flex") {
-    chatInput.focus();
+/* ============================================================
+   UI HELPERS
+============================================================ */
+
+function addMessage(text,type){
+  const div=document.createElement("div");
+  div.className="message "+type;
+  div.textContent=text;
+  messages.appendChild(div);
+  messages.scrollTop=messages.scrollHeight;
+}
+
+function bot(text){ addMessage(text,"bot"); }
+function user(text){ addMessage(text,"user"); }
+
+function openChat(){
+  chatWindow.classList.add("open");
+
+  if(!messages.children.length){
+    bot(
+      "Hi 👋 Welcome to Dr Rasha Clinic.\n\n" +
+      "I can help with treatments, prices, skin concerns, " +
+      "consultations, appointments, opening hours, location " +
+      "and general clinic information.\n\n" +
+      "How can I help you today?"
+    );
   }
-});
 
-function addMessage(text, type) {
-  const message = document.createElement("div");
-  message.classList.add("message", type);
-  message.textContent = text;
-  messages.appendChild(message);
-  messages.scrollTop = messages.scrollHeight;
+  setTimeout(()=>chatInput.focus(),50);
 }
 
-function bot(text) {
-  addMessage(text, "bot");
+function closeChatWindow(){
+  chatWindow.classList.remove("open");
 }
 
-function normalise(text) {
+chatButton.addEventListener("click",openChat);
+closeChat.addEventListener("click",closeChatWindow);
+
+
+/* ============================================================
+   TEXT / INTENT HELPERS
+============================================================ */
+
+function normalise(text){
   return text
     .toLowerCase()
-    .trim()
-    .replace(/[’']/g, "'")
-    .replace(/\s+/g, " ");
+    .replace(/[’']/g,"'")
+    .replace(/[?!.,;:£]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
 }
 
-function containsAny(text, list) {
-  return list.some(function(item) {
-    return text.includes(item);
-  });
+function containsAny(text,items){
+  return items.some(item=>text.includes(item));
 }
 
-/* =========================================================
-   SMART INTENT DETECTION
-========================================================= */
+function isQuestion(text){
+  const raw=text.trim();
+  const s=normalise(text);
 
-function detectTreatment(text) {
-  let bestKey = null;
-  let bestScore = 0;
-
-  for (const key in treatments) {
-    let score = 0;
-
-    treatments[key].names.forEach(function(name) {
-      if (text.includes(name)) {
-        score = Math.max(score, name.length);
-      }
-    });
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestKey = key;
-    }
-  }
-
-  return bestKey;
+  return (
+    raw.includes("?") ||
+    /^(what|what's|whats|how|where|when|why|which|can|could|do|does|is|are|tell me|explain|would|should)\b/i.test(s)
+  );
 }
 
-function isPricingQuestion(text) {
-  return containsAny(text, [
+function isPriceQuestion(text){
+  const s=normalise(text);
+
+  return containsAny(s,[
     "price",
     "prices",
     "pricing",
@@ -480,740 +1157,1124 @@ function isPricingQuestion(text) {
     "how expensive",
     "what does it cost",
     "what is the price",
-    "what's the price",
     "whats the price",
+    "what's the price",
     "what is the cost",
-    "what's the cost",
     "whats the cost",
+    "what's the cost",
     "fee",
     "fees",
     "charge",
     "charges",
+    "expensive",
     "affordable",
-    "expensive"
+    "pound",
+    "pounds"
   ]);
 }
 
-function isQuestion(text) {
-  return /[?]/.test(text) ||
-    containsAny(text, [
-      "what ",
-      "what's ",
-      "whats ",
-      "why ",
-      "how ",
-      "when ",
-      "where ",
-      "which ",
-      "can you ",
-      "could you ",
-      "do you ",
-      "does ",
-      "is there ",
-      "are there ",
-      "tell me ",
-      "explain ",
-      "how much",
-      "how long",
-      "do i need"
-    ]);
+function findTreatment(text){
+  const s=normalise(text);
+  let best=null;
+  let bestLength=0;
+
+  TREATMENTS.forEach(t=>{
+    t.aliases.forEach(alias=>{
+      if(s.includes(alias) && alias.length>bestLength){
+        best=t;
+        bestLength=alias.length;
+      }
+    });
+  });
+
+  return best;
 }
 
-function isLikelyName(text) {
-  const value = text.trim();
+function findConcern(text){
+  const s=normalise(text);
 
-  if (!value || isQuestion(value)) return false;
-  if (/[0-9@]/.test(value)) return false;
+  let best=null;
+  let bestLength=0;
 
-  if (containsAny(normalise(value), [
-    "price",
-    "cost",
-    "botox",
-    "profhilo",
-    "hydrafacial",
-    "treatment",
-    "consultation",
-    "appointment"
-  ])) {
-    return false;
-  }
+  CONCERNS.forEach(c=>{
+    c.aliases.forEach(alias=>{
+      if(s.includes(alias) && alias.length>bestLength){
+        best=c;
+        bestLength=alias.length;
+      }
+    });
+  });
 
-  return /^(my name is|i am|i'm|it's)\s+[a-z][a-z .'-]+$/i.test(value) ||
-    /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ -][A-Za-zÀ-ÖØ-öø-ÿ]+){1,4}$/.test(value);
+  return best;
 }
 
-function extractName(text) {
-  const match = text.trim().match(
-    /^(?:my name is|i am|i'm|it's)\s+(.+)$/i
-  );
 
-  return (match ? match[1] : text).trim();
-}
+function isHumanRequest(text){
+  const s=compactText(text);
 
-function isValidEmail(text) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text.trim());
-}
-
-function isValidPhone(text) {
-  const digits = text.replace(/\D/g, "");
-  return /^[+0-9() .-]{7,}$/.test(text.trim()) && digits.length >= 7;
-}
-
-function getContactMethod(text) {
-  const value = normalise(text);
-
-  if (value.includes("whatsapp")) return "WhatsApp";
-  if (value.includes("text") || value.includes("sms")) return "Text message";
-  if (value.includes("email")) return "Email";
-  if (value.includes("phone") || value.includes("call")) return "Phone";
-
-  return null;
-}
-
-/* =========================================================
-   STANDARD ANSWERS
-========================================================= */
-
-function priceResponse(key = null) {
-  let treatmentKey = key || lastTopic;
-
-  if (!treatmentKey || !treatments[treatmentKey]) {
-    bot("Of course. I can give you starting prices. Which treatment would you like the price for?");
-    return;
-  }
-
-  const treatment = treatments[treatmentKey];
-
-  lastTopic = treatmentKey;
-  customer.treatment = treatment.title;
-
-  bot(
-    `${treatment.title} starts at ${treatment.price}.
-
-The exact price can depend on the treatment area, amount required and your individual treatment plan. The clinic team will be able to confirm the current price for you after assessing your needs.`
+  return (
+    fuzzyContains(s,[
+      "human",
+      "person",
+      "real person",
+      "member of staff",
+      "staff member",
+      "someone",
+      "speak to someone",
+      "talk to someone",
+      "speak to a person",
+      "talk to a person",
+      "speak with someone",
+      "talk with someone",
+      "speak to a human",
+      "talk to a human",
+      "speak with a human",
+      "talk with a human",
+      "speak to staff",
+      "talk to staff",
+      "call me",
+      "phone call",
+      "callback",
+      "call back",
+      "call-back"
+    ])
   );
 }
 
-function treatmentResponse(key) {
-  lastTopic = key;
-  customer.treatment = treatments[key].title;
+function startHumanCallback(original){
+  customer.originalEnquiry=original;
+  customer.treatment=lastTreatment ? lastTreatment.name : "";
+  leadStage="name";
 
-  bot(
-    `${treatments[key].answer}
-
-If you'd like the starting price, just ask me. I can also explain consultation requirements or help you make an enquiry.`
+  return (
+    "Sure! I'd be happy to arrange for someone from the clinic team to contact you.\n\n" +
+    "May I take your full name?"
   );
 }
 
-function consultationResponse() {
-  bot(
-    "Yes. Dr Rasha Clinic recommends starting with a consultation. The expert practitioners and doctors carry out a comprehensive assessment and create a treatment plan tailored to your individual needs."
-  );
+function isEnquiryRequest(text){
+  const s=normalise(text);
+
+  return containsAny(s,[
+    "make an enquiry",
+    "make an inquiry",
+    "i want to enquire",
+    "i want to inquire",
+    "i'm interested",
+    "i am interested",
+    "i'd like to book",
+    "i would like to book",
+    "book an appointment",
+    "book a consultation",
+    "make an appointment",
+    "speak to the clinic",
+    "contact the clinic",
+    "i want to book",
+    "i'd like an appointment",
+    "i want an appointment",
+    "i want to make an appointment"
+  ]);
 }
 
-function clinicResponse() {
-  bot(
-    `Dr Rasha Clinic is located at:
+function isLocationQuestion(text){
+  const s=normalise(text);
 
-161 Brompton Road
-Knightsbridge
-London
-SW3 1EX
-
-Phone: ${clinic.phone}
-Email: ${clinic.email}
-WhatsApp: ${clinic.whatsapp}`
-  );
+  return containsAny(s,[
+    "where are you",
+    "where is the clinic",
+    "where is dr rasha",
+    "location",
+    "address",
+    "where do you",
+    "knightsbridge",
+    "where are you based",
+    "where are you located"
+  ]);
 }
 
-function hoursResponse() {
-  bot(
-    `Dr Rasha Clinic's current opening hours are:
+function isHoursQuestion(text){
+  const s=normalise(text);
 
-Monday: ${clinic.hours.Monday}
-Tuesday: ${clinic.hours.Tuesday}
-Wednesday: ${clinic.hours.Wednesday}
-Thursday: ${clinic.hours.Thursday}
-Friday: ${clinic.hours.Friday}
-Saturday: ${clinic.hours.Saturday}
-Sunday: ${clinic.hours.Sunday}`
-  );
-}
-
-function treatmentList() {
-  bot(
-    "Dr Rasha Clinic offers a wide range of aesthetic, skin, wellness and hair treatments.
-
-Examples include:
-• Anti-wrinkle injections
-• Dermal fillers
-• Profhilo
-• Polynucleotides
-• Exosomes
-• HydraFacial
-• Microneedling
-• Neogen Plasma
-• Obagi Blue Radiance Peel
-• Cosmelan
-• BBL & Moxi
-• EMFACE
-• AquaGold
-• LDM Skin Rejuvenation
-• Lymphatic treatments
-• HydraFacial Keravive
-• Hair Microneedling
-• Laser Hair Removal
-• EMSCULPT Neo
-• Exilis
-• Non-Surgical BBL
-• Semi-Permanent Make-Up"
-  );
-}
-
-/* =========================================================
-   SKIN CONCERNS
-========================================================= */
-
-function concernResponse(text) {
-
-  if (containsAny(text, ["acne", "spots", "breakouts"])) {
-    bot(
-      "Dr Rasha Clinic offers treatments for acne and related skin concerns. The most suitable option depends on your skin and the cause of your acne, so a consultation is recommended before choosing a treatment."
-    );
-    return true;
-  }
-
-  if (containsAny(text, ["acne scars", "acne scarring", "scarring"])) {
-    bot(
-      "Acne scarring can be treated with different skin-rejuvenation approaches depending on the type and severity. The clinic offers treatments including Microneedling, Neogen Plasma, Mesotherapy and Obagi Blue Radiance Peel."
-    );
-    return true;
-  }
-
-  if (containsAny(text, [
-    "pigmentation",
-    "dark spots",
-    "hyperpigmentation",
-    "uneven skin tone"
-  ])) {
-    bot(
-      "For pigmentation and uneven skin tone, Dr Rasha Clinic offers options including Cosmelan, BBL & Moxi, Obagi Blue Radiance Peel and other skin-rejuvenation treatments. The right option depends on your individual skin."
-    );
-    return true;
-  }
-
-  if (containsAny(text, [
-    "dull skin",
-    "dullness",
-    "tired skin",
-    "glow",
-    "radiance",
-    "dehydrated"
-  ])) {
-    bot(
-      "If your skin looks dull, dehydrated or tired, the clinic offers rejuvenation options including Profhilo, HydraFacial, LDM, AquaGold and other tailored skin treatments."
-    );
-    return true;
-  }
-
-  if (containsAny(text, [
-    "large pores",
-    "enlarged pores",
-    "pores"
-  ])) {
-    bot(
-      "For enlarged pores and uneven texture, treatments such as HydraFacial, Microneedling and AquaGold may be considered. A consultation can help determine which option is most suitable."
-    );
-    return true;
-  }
-
-  if (containsAny(text, [
-    "wrinkles",
-    "fine lines",
-    "ageing",
-    "aging",
-    "anti ageing",
-    "anti-aging",
-    "crow's feet",
-    "forehead lines"
-  ])) {
-    bot(
-      "For wrinkles and fine lines, Dr Rasha Clinic offers options including anti-wrinkle injections, dermal fillers, Profhilo, Microneedling, EMFACE and other rejuvenation treatments. The best option depends on your individual concerns and goals."
-    );
-    return true;
-  }
-
-  if (containsAny(text, [
-    "hair loss",
-    "thinning hair",
-    "hair thinning"
-  ])) {
-    bot(
-      "The clinic offers hair and scalp treatments including HydraFacial Keravive and Hair Microneedling. A consultation can help determine which option is most appropriate for your concern."
-    );
-    return true;
-  }
-
-  if (containsAny(text, [
-    "sweating",
-    "hyperhidrosis",
-    "excessive sweating"
-  ])) {
-    bot(
-      "Dr Rasha Clinic offers treatments for concerns including excess sweating and hyperhidrosis. Treatment suitability depends on the individual, so the clinic team can assess your needs during a consultation."
-    );
-    return true;
-  }
-
-  return false;
-}
-
-/* =========================================================
-   ENQUIRY / LEAD COLLECTION
-========================================================= */
-
-function startLeadCollection(originalMessage) {
-  customer.originalMessage = originalMessage;
-
-  if (lastTopic && treatments[lastTopic]) {
-    customer.treatment = treatments[lastTopic].title;
-  }
-
-  stage = "name";
-
-  bot(
-    "Absolutely. I can help with your enquiry.
-
-Before I pass your details to the clinic team, may I take your full name?"
-  );
-}
-
-/*
-  IMPORTANT:
-  If the chatbot is asking for a name/email/phone and the
-  customer asks another genuine question, answer that question
-  instead of saving the whole sentence as their personal detail.
-*/
-
-function answerQuestionDuringLeadStage(text) {
-  const lower = normalise(text);
-  const key = detectTreatment(lower);
-
-  if (isPricingQuestion(lower)) {
-    priceResponse(key);
-    return true;
-  }
-
-  if (key) {
-    treatmentResponse(key);
-    return true;
-  }
-
-  if (containsAny(lower, [
+  return containsAny(s,[
     "opening hours",
     "opening times",
     "when are you open",
     "what time do you open",
     "what time do you close",
     "are you open",
-    "when do you close"
-  ])) {
-    hoursResponse();
-    return true;
-  }
+    "when do you close",
+    "open today",
+    "open saturday",
+    "open sunday",
+    "open monday",
+    "open tuesday",
+    "open wednesday",
+    "open thursday",
+    "open friday"
+  ]);
+}
 
-  if (containsAny(lower, [
-    "where are you",
-    "where is the clinic",
-    "location",
-    "address",
-    "located",
-    "knightsbridge",
-    "how do i get",
-    "where do you"
-  ])) {
-    clinicResponse();
-    return true;
-  }
+function isContactQuestion(text){
+  const s=normalise(text);
 
-  if (containsAny(lower, [
-    "do i need a consultation",
-    "need a consultation",
-    "do i have to see a doctor",
+  return containsAny(s,[
+    "contact details",
+    "contact you",
+    "phone number",
+    "telephone number",
+    "email address",
+    "whatsapp number",
+    "how can i contact",
+    "how do i contact",
+    "contact information"
+  ]);
+}
+
+function isConsultationQuestion(text){
+  const s=normalise(text);
+
+  return containsAny(s,[
+    "consultation",
+    "consult",
+    "assessment",
     "do i need to see a doctor",
-    "do i need consultation",
-    "consultation"
-  ])) {
-    consultationResponse();
-    return true;
-  }
-
-  if (concernResponse(lower)) {
-    return true;
-  }
-
-  return false;
+    "do i need a consultation",
+    "do i have to have a consultation",
+    "need consultation",
+    "need a consultation first"
+  ]);
 }
 
-function handleLeadStage(text) {
+function isBookingQuestion(text){
+  const s=normalise(text);
 
-  /* NAME */
-  if (stage === "name") {
-
-    if (answerQuestionDuringLeadStage(text)) {
-      bot("When you're ready, may I also have your full name?");
-      return true;
-    }
-
-    if (!isLikelyName(text)) {
-      bot(
-        "I just need your full name for the enquiry. You can write it, for example, as \"Selma Shaimi\"."
-      );
-      return true;
-    }
-
-    customer.name = extractName(text);
-    stage = "email";
-
-    bot(
-      `Thank you, ${customer.name}. What is the best email address to contact you on?`
-    );
-
-    return true;
-  }
-
-  /* EMAIL */
-  if (stage === "email") {
-
-    if (answerQuestionDuringLeadStage(text)) {
-      bot(
-        "When you're ready, please send me your email address so I can continue with the enquiry."
-      );
-      return true;
-    }
-
-    if (!isValidEmail(text)) {
-      bot(
-        "That doesn't look like a complete email address. Please enter the email address you'd like the clinic to use."
-      );
-      return true;
-    }
-
-    customer.email = text.trim();
-    stage = "phone";
-
-    bot("Thank you. What is your phone number?");
-
-    return true;
-  }
-
-  /* PHONE */
-  if (stage === "phone") {
-
-    if (answerQuestionDuringLeadStage(text)) {
-      bot(
-        "When you're ready, please send me your phone number so I can continue with the enquiry."
-      );
-      return true;
-    }
-
-    if (!isValidPhone(text)) {
-      bot(
-        "Please enter a valid phone number, including the country code if appropriate."
-      );
-      return true;
-    }
-
-    customer.phone = text.trim();
-    stage = "contact";
-
-    bot(
-      "How would you prefer the clinic to contact you: phone, email, text message or WhatsApp?"
-    );
-
-    return true;
-  }
-
-  /* CONTACT METHOD */
-  if (stage === "contact") {
-
-    const method = getContactMethod(text);
-
-    if (!method) {
-
-      if (answerQuestionDuringLeadStage(text)) {
-        bot(
-          "When you're ready, please tell me whether you prefer phone, email, text message or WhatsApp."
-        );
-      } else {
-        bot(
-          "Please tell me whether you prefer phone, email, text message or WhatsApp."
-        );
-      }
-
-      return true;
-    }
-
-    customer.preferredContactMethod = method;
-    stage = "chat";
-
-    console.log("DR RASHA LEAD:", customer);
-
-    bot(
-      `Perfect. I've recorded your preferred contact method as ${method}.
-
-Your enquiry has been recorded and the clinic team can follow up with you using your preferred method.
-
-Is there anything else you'd like to know?`
-    );
-
-    return true;
-  }
-
-  return false;
-}
-
-/* =========================================================
-   MAIN MESSAGE HANDLER
-========================================================= */
-
-function handleMessage(text) {
-
-  const lower = normalise(text);
-
-  /* Lead collection gets first priority, but questions inside
-     the lead flow are handled intelligently. */
-  if (handleLeadStage(text)) {
-    return;
-  }
-
-  /* PRICE */
-  if (isPricingQuestion(lower)) {
-    priceResponse(detectTreatment(lower));
-    return;
-  }
-
-  /* ENQUIRY / BOOKING */
-  if (containsAny(lower, [
+  return containsAny(s,[
     "book",
     "booking",
     "appointment",
-    "enquire",
-    "enquiry",
-    "make an appointment",
-    "schedule",
-    "make an enquiry",
-    "contact the clinic",
-    "i'm interested",
-    "i am interested"
-  ])) {
-    startLeadCollection(text);
-    return;
+    "availability",
+    "available appointment",
+    "how do i book"
+  ]);
+}
+
+
+/* ============================================================
+   CLINIC ANSWERS
+============================================================ */
+
+function locationAnswer(){
+  return (
+    "Dr Rasha Clinic is located in:\n\n" +
+    CLINIC.address +
+    "\n\nThe clinic is in the heart of Knightsbridge, London."
+  );
+}
+
+function hoursAnswer(){
+  return (
+    "The clinic's listed opening hours are:\n\n" +
+    "Monday: " + CLINIC.hours.Monday + "\n" +
+    "Tuesday: " + CLINIC.hours.Tuesday + "\n" +
+    "Wednesday: " + CLINIC.hours.Wednesday + "\n" +
+    "Thursday: " + CLINIC.hours.Thursday + "\n" +
+    "Friday: " + CLINIC.hours.Friday + "\n" +
+    "Saturday: " + CLINIC.hours.Saturday + "\n" +
+    "Sunday: " + CLINIC.hours.Sunday
+  );
+}
+
+function contactAnswer(){
+  return (
+    "You can contact Dr Rasha Clinic by:\n\n" +
+    "Phone: " + CLINIC.phone + "\n" +
+    "WhatsApp: " + CLINIC.whatsapp + "\n" +
+    "Email: " + CLINIC.email + "\n\n" +
+    "Address: " + CLINIC.address
+  );
+}
+
+function consultationAnswer(){
+  return (
+    "Yes. Before treatment, the clinic's expert practitioners and doctors " +
+    "conduct a comprehensive assessment and create a bespoke treatment plan " +
+    "tailored to the individual's needs."
+  );
+}
+
+function bookingAnswer(){
+  return (
+    "Booking is straightforward. You can book through the clinic's online " +
+    "booking platform, or contact the clinic by WhatsApp or phone. " +
+    "The clinic can then confirm the most suitable appointment and practitioner."
+  );
+}
+
+function downtimeAnswer(){
+  return (
+    "Many of the clinic's treatments have little or no downtime, but this " +
+    "depends on the specific treatment. The practitioner can explain the " +
+    "expected recovery and any aftercare during your consultation."
+  );
+}
+
+function painAnswer(){
+  return (
+    "The clinic states that most aesthetic treatments are non-invasive " +
+    "with minimal to no pain or mild discomfort. Numbing agents are available " +
+    "with many treatments to improve comfort."
+  );
+}
+
+function treatmentListAnswer(){
+  return (
+    "Dr Rasha Clinic offers treatments across injectables, face and skin, " +
+    "body, hair and wellness.\n\n" +
+
+    "INJECTABLES\n" +
+    "• Anti-Wrinkle Injections\n" +
+    "• Gummy Smile Injections\n" +
+    "• Dermal Fillers\n" +
+    "• Cheek, Chin, Lip, Nose, Temple and Tear Trough Fillers\n" +
+    "• Nasolabial and Marionette Line Filler\n" +
+    "• Profhilo\n" +
+    "• Polynucleotides\n" +
+    "• Exosomes\n\n" +
+
+    "FACE & SKIN\n" +
+    "• HydraFacial\n" +
+    "• Signature, Deluxe and Platinum HydraFacial\n" +
+    "• Dr Rasha HydraFacial\n" +
+    "• Dr Rasha Gold Lift Facial\n" +
+    "• AquaGold Facial\n" +
+    "• BBL & Moxi Laser\n" +
+    "• Cosmelan\n" +
+    "• EMFACE\n" +
+    "• Exilis\n" +
+    "• Microneedling\n" +
+    "• Neogen Plasma\n" +
+    "• Obagi Blue Radiance Peel\n" +
+    "• Semi-Permanent Make-Up\n" +
+    "• Sofwave\n" +
+    "• UltraClear\n" +
+    "• XERF / XERFWave\n" +
+    "• Dermalux LED Phototherapy\n" +
+    "• LDM\n" +
+    "• Lymphatic Facial Massage\n" +
+    "• Mesotherapy\n\n" +
+
+    "BODY, HAIR & WELLNESS\n" +
+    "• HydraFacial Keravive\n" +
+    "• Hair Microneedling\n" +
+    "• Laser Hair Removal\n" +
+    "• Lymphatic Drainage\n" +
+    "• Exilis Body\n" +
+    "• EMSCULPT Neo\n" +
+    "• HydraFacial Back Treatment\n" +
+    "• Hand Rejuvenation\n" +
+    "• Non-Surgical BBL\n" +
+    "• Dermamelan Intimate Peel\n" +
+    "• NAD+ Therapy"
+  );
+}
+
+
+/* ============================================================
+   TREATMENT ANSWERS
+============================================================ */
+
+function treatmentAnswer(t,includePrice){
+  lastTreatment=t;
+  customer.treatment=t.name;
+
+  let response=t.answer;
+
+  if(includePrice){
+    if(t.price){
+      response = t.name + " starts from " + t.price + ". The exact price will be confirmed by the clinic based on your individual treatment plan.";
+    }else{
+      response = "The clinic team can confirm the current price for " + t.name + " for you, as pricing is not published for this treatment.";
+    }
   }
 
-  /* OPENING HOURS */
-  if (containsAny(lower, [
-    "opening hours",
-    "opening times",
-    "open today",
-    "when are you open",
-    "what time do you open",
-    "what time do you close",
-    "are you open",
-    "when do you close"
-  ])) {
-    hoursResponse();
-    return;
+  return response;
+}
+
+function concernAnswer(c,includePrice){
+  let response=c.answer;
+
+  if(includePrice && c.price){
+    response +=
+      "\n\nThe concern category is currently listed from " +
+      c.price +
+      ". The exact treatment and price depend on the assessment.";
   }
 
-  /* LOCATION */
-  if (containsAny(lower, [
-    "where are you",
-    "where is the clinic",
-    "location",
-    "address",
-    "located",
-    "knightsbridge",
-    "how do i get",
-    "where do you"
-  ])) {
-    clinicResponse();
-    return;
-  }
+  return response;
+}
 
-  /* CONTACT */
-  if (containsAny(lower, [
-    "contact",
-    "phone number",
-    "telephone",
-    "email address",
-    "contact details",
-    "whatsapp",
-    "call you"
-  ])) {
-    clinicResponse();
-    return;
-  }
 
-  /* SPECIFIC TREATMENT */
-  const key = detectTreatment(lower);
+/* ============================================================
+   FAQ / GENERAL INTELLIGENCE
+============================================================ */
 
-  if (key) {
-    treatmentResponse(key);
-    return;
-  }
+function generalAnswer(text){
 
-  /* CONSULTATION */
-  if (containsAny(lower, [
-    "consultation",
-    "do i need a consult",
-    "need a consultation",
-    "do i have to see a doctor",
-    "do i need to see a doctor",
-    "do i need consultation"
-  ])) {
-    consultationResponse();
-    return;
-  }
+  const s=normalise(text);
 
-  /* HYDRAFACIAL DURATION */
-  if (lower.includes("how long") && lower.includes("hydrafacial")) {
-    bot(
-      "HydraFacial treatments generally take around 30–60 minutes depending on the version. Signature is around 30 minutes, Deluxe around 45 minutes and Platinum around one hour."
-    );
-    return;
-  }
-
-  /* DOWNTIME */
-  if (containsAny(lower, [
-    "downtime",
-    "recovery",
-    "take time off",
-    "back to work",
-    "recovery time"
-  ])) {
-    bot(
-      "Downtime depends on the treatment. Many of the clinic's treatments have minimal or no downtime, but this varies by treatment and by individual. The practitioner can explain the expected recovery during your consultation."
-    );
-    return;
-  }
-
-  /* PAIN */
-  if (containsAny(lower, [
-    "does it hurt",
-    "is it painful",
-    "painful",
-    "pain",
-    "hurt"
-  ])) {
-    bot(
-      "Pain and discomfort depend on the treatment. Many aesthetic treatments involve minimal to no pain or mild discomfort, and numbing agents may be available for some treatments to improve comfort."
-    );
-    return;
-  }
-
-  /* TREATMENT LIST */
-  if (containsAny(lower, [
-    "treatment",
-    "treatments",
-    "what do you offer",
-    "what do you do",
-    "services",
-    "what can you do",
-    "what treatments"
-  ])) {
-    treatmentList();
-    return;
-  }
-
-  /* SKIN CONCERNS */
-  if (concernResponse(lower)) {
-    return;
-  }
-
-  /* COMPARISON */
-  if (containsAny(lower, [
-    "which is better",
-    "what is better",
-    "best treatment",
-    "what should i get",
-    "what treatment should",
-    "which one should",
-    "what would be best"
-  ])) {
-    bot(
-      "The best treatment depends on your skin, concerns and goals. I can give you general information about the options, but the clinic's practitioners need to assess you before recommending a personalised treatment plan."
-    );
-    return;
-  }
-
-  /* GREETING */
-  if (containsAny(lower, [
+  /* Greetings */
+  if(containsAny(s,[
     "hello",
     "hi",
     "hey",
     "good morning",
     "good afternoon",
     "good evening"
-  ])) {
-    bot(
-      "Hello 👋 Welcome to Dr Rasha Clinic. How can I help you today?"
-    );
-    return;
+  ])){
+    return "Hi 👋 Welcome to Dr Rasha Clinic. How can I help you today?";
   }
 
-  /* THANK YOU */
-  if (containsAny(lower, [
+  /* Thanks */
+  if(containsAny(s,[
     "thank you",
     "thanks",
     "thank u"
-  ])) {
-    bot(
-      "You're very welcome 😊 If you have another question about treatments, prices, consultations or the clinic, just ask."
-    );
-    return;
+  ])){
+    return "You're very welcome. Is there anything else you'd like to know?";
   }
 
-  /* GENERAL HELP */
-  if (containsAny(lower, [
-    "help",
-    "can you help",
-    "what can you help with",
-    "what do you know"
-  ])) {
-    bot(
-      "I can help with general information about Dr Rasha Clinic, including treatments, skin concerns, prices, consultations, opening hours, location, contact details and making an enquiry. What would you like to know?"
-    );
-    return;
+  /* Location */
+  if(isLocationQuestion(text)){
+    return locationAnswer();
   }
 
-  /* DEFAULT */
-  bot(
-    "I'd be happy to help. You can ask me about a treatment, its starting price, consultations, skin concerns, opening hours, the clinic or making an enquiry. What would you like to know?"
+  /* Hours */
+  if(isHoursQuestion(text)){
+    return hoursAnswer();
+  }
+
+  /* Contact */
+  if(isContactQuestion(text)){
+    return contactAnswer();
+  }
+
+  /* Consultation */
+  if(isConsultationQuestion(text)){
+    return consultationAnswer();
+  }
+
+  /* Booking */
+  if(isBookingQuestion(text)){
+    return bookingAnswer();
+  }
+
+  /* Pain */
+  if(containsAny(s,[
+    "does it hurt",
+    "is it painful",
+    "painful",
+    "pain",
+    "hurt"
+  ])){
+    return painAnswer();
+  }
+
+  /* Downtime */
+  if(containsAny(s,[
+    "downtime",
+    "recovery",
+    "how long to recover",
+    "take time off work",
+    "back to work"
+  ])){
+    return downtimeAnswer();
+  }
+
+  /* HydraFacial specific FAQ */
+  if(s.includes("hydrafacial") && s.includes("how long")){
+    return (
+      "HydraFacial treatments take about 30–60 minutes depending on the option. " +
+      "Signature is around 30 minutes, Deluxe around 45 minutes and Platinum around one hour."
+    );
+  }
+
+  if(s.includes("hydrafacial") && containsAny(s,[
+    "who is it for",
+    "who can have",
+    "suitable for",
+    "suitable"
+  ])){
+    return (
+      "The clinic says HydraFacial is suitable for all skin types, including sensitive skin."
+    );
+  }
+
+  if(s.includes("hydrafacial") && containsAny(s,[
+    "how often",
+    "how frequently"
+  ])){
+    return (
+      "The clinic recommends monthly HydraFacial sessions for best results."
+    );
+  }
+
+  if(s.includes("hydrafacial") && containsAny(s,[
+    "what happens after",
+    "results",
+    "after treatment"
+  ])){
+    return (
+      "The clinic says you can expect smoother, brighter and hydrated-looking skin immediately after a HydraFacial."
+    );
+  }
+
+  if(s.includes("hydrafacial") && containsAny(s,[
+    "downtime",
+    "recovery"
+  ])){
+    return (
+      "The clinic says there is no downtime after a HydraFacial and you can return to your day immediately."
+    );
+  }
+
+  /* Best treatment */
+  if(containsAny(s,[
+    "which treatment is best",
+    "what treatment is best",
+    "best treatment for me",
+    "what should i get",
+    "which one should i get",
+    "what would you recommend"
+  ])){
+    return (
+      "The best treatment depends on your skin, concerns and goals. " +
+      "I can explain the available options, but the clinic's practitioners " +
+      "should assess you before recommending a personalised treatment plan."
+    );
+  }
+
+  /* Treatment catalogue */
+  if(containsAny(s,[
+    "what treatments do you offer",
+    "what treatments do you have",
+    "what do you offer",
+    "what services do you offer",
+    "what can you do",
+    "list treatments"
+  ])){
+    return treatmentListAnswer();
+  }
+
+  /* Clinic identity */
+  if(containsAny(s,[
+    "who are you",
+    "what is dr rasha clinic",
+    "tell me about the clinic",
+    "about the clinic"
+  ])){
+    return (
+      "Dr Rasha Clinic is an aesthetics and wellness clinic based in Knightsbridge, London. " +
+      "The clinic focuses on personalised non-surgical aesthetic, skin, body, hair and wellness treatments."
+    );
+  }
+
+  /* Directions */
+  if(containsAny(s,[
+    "how do i get there",
+    "how do i get to the clinic",
+    "directions",
+    "nearest station",
+    "tube station"
+  ])){
+    return (
+      "The clinic is at " +
+      CLINIC.address +
+      ". For live travel directions, I recommend using your preferred maps app with the clinic address."
+    );
+  }
+
+  /* Typo-tolerant common intents */
+  if(fuzzyContains(s,["botox","filler","profhilo","hydrafacial","microneedling","cosmelan","emface"])){
+    const t=fuzzyTreatment(text);
+    if(t) return treatmentAnswer(t,false);
+  }
+
+  if(fuzzyContains(s,["location","address","knightsbridge"])){
+    return locationAnswer();
+  }
+
+  if(fuzzyContains(s,["opening","hours","open","close"])){
+    return hoursAnswer();
+  }
+
+  return (
+    "I can help with treatments, starting prices, skin concerns, consultations, " +
+    "appointments, opening hours, location, contact details, downtime and general FAQs. " +
+    "What would you like to know?"
   );
 }
 
-/* =========================================================
-   SEND MESSAGE
-========================================================= */
 
-function sendMessage(text) {
+/* ============================================================
+   LEAD COLLECTION
+============================================================ */
 
-  text = text.trim();
+function looksLikeFullName(text){
+  const s=text.trim();
 
-  if (!text) return;
+  if(!s) return false;
+  if(isQuestion(s)) return false;
+  if(/[@0-9]/.test(s)) return false;
 
-  addMessage(text, "user");
+  const words=s.split(/\s+/);
 
-  chatInput.value = "";
+  if(words.length<2 || words.length>4) return false;
 
-  handleMessage(text);
+  return words.every(word=>/^[A-Za-zÀ-ÿ'-]{2,30}$/.test(word));
 }
 
-chatForm.addEventListener("submit", function(event) {
+function validEmail(text){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text.trim());
+}
+
+function validPhone(text){
+  const digits=text.replace(/\D/g,"");
+  return digits.length>=9 && digits.length<=15;
+}
+
+function getContactMethod(text){
+  const s=normalise(text);
+
+  if(s.includes("whatsapp")) return "WhatsApp";
+  if(s.includes("text") || s.includes("sms")) return "Text message";
+  if(s.includes("email")) return "Email";
+  if(s.includes("phone") || s.includes("call") || s.includes("telephone")) return "Phone";
+
+  return "";
+}
+
+function startEnquiry(original){
+  customer.originalEnquiry=original;
+
+  if(lastTreatment){
+    customer.treatment=lastTreatment.name;
+  }
+
+  leadStage="name";
+
+  return (
+    "Absolutely. I can help you make an enquiry.\n\n" +
+    "May I take your full name?"
+  );
+}
+
+
+/* ============================================================
+   IMPORTANT:
+   During lead collection, a new question is handled as a
+   question FIRST. This prevents:
+   "What is Profhilo?"
+   being saved as the customer's name.
+============================================================ */
+
+function handleLead(text){
+
+  const questionLike =
+    fuzzyQuestion(text) ||
+    isComparisonQuestion(text) ||
+    fuzzyTreatment(text) ||
+    fuzzyPriceQuestion(text) ||
+    isLocationQuestion(text) ||
+    isHoursQuestion(text) ||
+    isContactQuestion(text);
+
+  if(questionLike){
+
+    const answer=answerCustomerQuestion(text);
+
+    let reminder="";
+
+    if(leadStage==="name"){
+      reminder="\n\nWhen you're ready, please send your full name.";
+    }
+
+    if(leadStage==="email"){
+      reminder="\n\nWhen you're ready, please send your email address.";
+    }
+
+    if(leadStage==="phone"){
+      reminder="\n\nWhen you're ready, please send your phone number.";
+    }
+
+    if(leadStage==="contact"){
+      reminder="\n\nWhen you're ready, please choose phone, email, text message or WhatsApp.";
+    }
+
+    return answer+reminder;
+  }
+
+
+  if(leadStage==="name"){
+
+    if(looksLikeFullName(text)){
+      customer.name=text.trim();
+      leadStage="email";
+
+      return (
+        "Thank you, " +
+        customer.name +
+        ". What is the best email address to contact you on?"
+      );
+    }
+
+    return (
+      "Please send your full name, for example: Jane Smith."
+    );
+  }
+
+
+  if(leadStage==="email"){
+
+    if(validEmail(text)){
+      customer.email=text.trim();
+      leadStage="phone";
+
+      return "Thank you. What is your phone number?";
+    }
+
+    return (
+      "Please enter a valid email address, for example: name@example.com."
+    );
+  }
+
+
+  if(leadStage==="phone"){
+
+    if(validPhone(text)){
+      customer.phone=text.trim();
+      leadStage="contact";
+
+      return (
+        "Thank you. How would you prefer the clinic to contact you: " +
+        "phone, email, text message or WhatsApp?"
+      );
+    }
+
+    return "Please enter a valid phone number.";
+  }
+
+
+  if(leadStage==="contact"){
+
+    const method=getContactMethod(text);
+
+    if(method){
+
+      customer.preferredContactMethod=method;
+      leadStage=null;
+
+      /*
+        DEMO HOOK:
+        This object can later be sent to Make/Zapier/your backend.
+      */
+      console.log("DR RASHA DEMO LEAD",customer);
+
+      return (
+        "Perfect. I've recorded your preferred contact method as " +
+        method +
+        ".\n\n" +
+        "I've recorded your request for a member of the clinic team to contact you. " +
+        "For this demo, the request is now ready for the clinic team to follow up using your preferred method.\n\n" +
+        "Is there anything else you'd like to know?"
+      );
+    }
+
+    return (
+      "Please choose one of these: phone, email, text message or WhatsApp."
+    );
+  }
+
+  return answerCustomerQuestion(text);
+}
+
+
+/* ============================================================
+   MAIN QUESTION ENGINE
+============================================================ */
+
+
+function isShortFollowUp(text){
+  const s=normalise(text);
+
+  return (
+    /^(how much|how much is it|how much does it cost|what is the price|whats the price|what's the price|price|cost|how long|how long does it last|does it hurt|is it painful|what is it|what's it|tell me more|more information|where is it|where do i go|how do i book|can i book|is there downtime|what about downtime)$/.test(s)
+  );
+}
+
+function contextualFollowUp(text){
+  const s=normalise(text);
+
+  if(isComparisonQuestion(text)){
+    return botoxVsFillerAnswer();
+  }
+
+  if(!lastTreatment) return null;
+
+  /* The customer is referring to the treatment from the immediately
+     previous turn. Only answer the requested part. */
+  if(fuzzyPriceQuestion(text)){
+    if(lastTreatment.price){
+      return lastTreatment.name + " starts from " + lastTreatment.price + ". The exact price will be confirmed by the clinic based on your individual treatment plan.";
+    }
+    return "The clinic team can confirm the current price for " + lastTreatment.name + " for you, as pricing is not published for this treatment.";
+  }
+
+  if(containsAny(s,["how long","how long does it last","how long do results last","duration"])){
+    const durationMap = {
+      "Anti-Wrinkle Injections":"Results typically develop over several days and the effect is temporary; the practitioner can advise on expected duration for your individual treatment.",
+      "Profhilo":"The practitioner can advise on expected duration based on your skin and treatment plan.",
+      "HydraFacial":"A HydraFacial session takes around 30–60 minutes depending on the treatment option.",
+      "Signature HydraFacial":"Signature HydraFacial takes around 30 minutes.",
+      "Deluxe HydraFacial":"Deluxe HydraFacial takes around 45 minutes.",
+      "Platinum HydraFacial":"Platinum HydraFacial takes around one hour."
+    };
+    return durationMap[lastTreatment.name] || "The practitioner can confirm the expected treatment time and duration of results for your individual treatment.";
+  }
+
+  if(containsAny(s,["does it hurt","is it painful","pain","hurt"])){
+    return "The clinic says most aesthetic treatments involve minimal to no pain or mild discomfort. Comfort measures such as numbing can be used for many treatments where appropriate.";
+  }
+
+  if(containsAny(s,["downtime","recovery","how long to recover","take time off"])){
+    return "Downtime depends on the treatment. The practitioner can explain the expected recovery and aftercare for " + lastTreatment.name + " during your consultation.";
+  }
+
+  if(containsAny(s,["how do i book","can i book","book"])){
+    return "Yes. You can enquire about or book a consultation through the clinic, and the team can confirm availability and the most suitable appointment.";
+  }
+
+  return null;
+}
+
+
+/* ============================================================
+   SMART COMPARISONS + TYPO TOLERANCE
+============================================================ */
+
+function compactText(text){
+  return normalise(text).replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim();
+}
+
+function levenshtein(a,b){
+  const m=a.length,n=b.length;
+  const dp=Array.from({length:m+1},()=>Array(n+1).fill(0));
+  for(let i=0;i<=m;i++) dp[i][0]=i;
+  for(let j=0;j<=n;j++) dp[0][j]=j;
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      dp[i][j]=Math.min(
+        dp[i-1][j]+1,
+        dp[i][j-1]+1,
+        dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1)
+      );
+    }
+  }
+  return dp[m][n];
+}
+
+function typoMatch(word,target){
+  if(word===target) return true;
+  if(word.length<4 || target.length<4) return false;
+  const distance=levenshtein(word,target);
+  const limit=target.length>=8?2:1;
+  return distance<=limit;
+}
+
+function fuzzyContains(text,words){
+  const tokens=compactText(text).split(" ");
+  return words.some(target=>{
+    const clean=target.replace(/[^a-z0-9]/g,"");
+    return tokens.some(token=>typoMatch(token,clean));
+  });
+}
+
+function fuzzyTreatment(text){
+  const exact=findTreatment(text);
+  if(exact) return exact;
+
+  let best=null,bestScore=0;
+  const tokens=compactText(text).split(" ");
+
+  TREATMENTS.forEach(t=>{
+    t.aliases.forEach(alias=>{
+      const aliasTokens=alias.replace(/[^a-z0-9 ]/g," ").split(" ");
+      let score=0;
+
+      aliasTokens.forEach(at=>{
+        if(tokens.some(tok=>typoMatch(tok,at))) score++;
+      });
+
+      if(aliasTokens.length===1 && score===1) score=1.2;
+
+      if(score>bestScore){
+        bestScore=score;
+        best=t;
+      }
+    });
+  });
+
+  return bestScore>=1 ? best : null;
+}
+
+function fuzzyIntent(text,groups){
+  const s=compactText(text);
+  return groups.some(group=>{
+    const words=group.split(" ");
+    return words.every(w=>fuzzyMatchInSentence(s,w));
+  });
+}
+
+function fuzzyMatchInSentence(sentence,word){
+  const tokens=sentence.split(" ");
+  return tokens.some(token=>typoMatch(token,word));
+}
+
+function isComparisonQuestion(text){
+  const s=compactText(text);
+
+  const hasBotox=fuzzyContains(s,["botox","botoxx","botoxs"]);
+  const hasFiller=fuzzyContains(s,["filler","fillers","dermalfiller","dermalfillers"]);
+
+  const comparisonWords=[
+    "better","best","difference","different","versus","vs",
+    "compare","comparison","or"
+  ];
+
+  return hasBotox && hasFiller && fuzzyContains(s,comparisonWords);
+}
+
+function botoxVsFillerAnswer(){
+  return (
+    "Botox and dermal fillers are different treatments, so neither is automatically \"better\".\n\n" +
+    "• Botox / Anti-Wrinkle Injections: temporarily relax targeted muscles and are commonly used to soften expression lines and wrinkles.\n\n" +
+    "• Dermal Fillers: use injectable filler to restore or enhance volume and definition. They can be used in areas such as the lips, cheeks, chin and other facial contours.\n\n" +
+    "The main difference is that Botox works primarily by reducing muscle activity, while dermal fillers work by adding or restoring volume.\n\n" +
+    "The clinic can only advise which treatment is suitable for you after a consultation and individual assessment."
+  );
+}
+
+function fuzzyPriceQuestion(text){
+  if(isPriceQuestion(text)) return true;
+
+  return fuzzyIntent(text,[
+    "how much",
+    "what price",
+    "what cost",
+    "price",
+    "cost",
+    "how expensive"
+  ]);
+}
+
+function fuzzyQuestion(text){
+  if(isQuestion(text)) return true;
+
+  const s=compactText(text);
+
+  return (
+    s.endsWith("botox") ||
+    s.endsWith("filler") ||
+    s.endsWith("fillers") ||
+    fuzzyIntent(text,[
+      "what botox",
+      "what filler",
+      "what profhilo",
+      "how much",
+      "where clinic",
+      "opening hours",
+      "does hurt",
+      "how long",
+      "what price",
+      "what cost"
+    ])
+  );
+}
+
+function answerCustomerQuestion(text){
+
+  /* Comparison questions must be handled before individual treatment
+     matching. Otherwise "Botox or filler?" gets answered as filler only. */
+  if(isComparisonQuestion(text)){
+    return botoxVsFillerAnswer();
+  }
+
+  const treatment=fuzzyTreatment(text);
+  const concern=findConcern(text);
+
+  /* If the customer is referring to the treatment discussed immediately
+     before, answer only the new question instead of repeating the treatment
+     description. */
+  if(!treatment && lastTreatment && isShortFollowUp(text)){
+    const followUp=contextualFollowUp(text);
+    if(followUp) return followUp;
+  }
+
+  /*
+    PRICE FIRST:
+    This is intentional so:
+    "How much is Botox?"
+    gives the price only.
+  */
+  if(fuzzyPriceQuestion(text)){
+
+    if(treatment){
+      if(treatment.price){
+        return treatment.name + " starts from " + treatment.price + ". The exact price will be confirmed by the clinic based on your individual treatment plan.";
+      }
+      return "The clinic team can confirm the current price for " + treatment.name + " for you, as pricing is not published for this treatment.";
+    }
+
+    if(concern){
+      if(concern.price){
+        return concern.name + " treatments start from " + concern.price + ". The exact treatment and price depend on your assessment.";
+      }
+      return concern.answer;
+    }
+
+    if(lastTreatment){
+      return contextualFollowUp(text) || "The clinic team can confirm the current price for " + lastTreatment.name + " for you.";
+    }
+
+    return (
+      "Of course. Which treatment would you like the price for? " +
+      "For example, you can ask: \"How much is Botox?\""
+    );
+  }
+
+
+  /*
+    TREATMENT:
+    If customer did not ask about price, DO NOT show price.
+  */
+  if(treatment){
+    return treatmentAnswer(treatment,false);
+  }
+
+
+  /*
+    CONCERN
+  */
+  if(concern){
+    return concernAnswer(concern,false);
+  }
+
+
+  /*
+    CLINIC INFORMATION
+  */
+  if(isLocationQuestion(text)){
+    return locationAnswer();
+  }
+
+  if(isHoursQuestion(text)){
+    return hoursAnswer();
+  }
+
+  if(isContactQuestion(text)){
+    return contactAnswer();
+  }
+
+  if(isConsultationQuestion(text)){
+    return consultationAnswer();
+  }
+
+  if(isBookingQuestion(text)){
+    return bookingAnswer();
+  }
+
+
+  /*
+    GENERAL
+  */
+  return generalAnswer(text);
+}
+
+
+/* ============================================================
+   MESSAGE SEND
+============================================================ */
+
+chatForm.addEventListener("submit",function(event){
+
   event.preventDefault();
-  sendMessage(chatInput.value);
+
+  const text=chatInput.value.trim();
+
+  if(!text) return;
+
+  user(text);
+  chatInput.value="";
+
+  const typing=document.createElement("div");
+  typing.className="message bot typing";
+  typing.textContent="Typing…";
+
+  messages.appendChild(typing);
+  messages.scrollTop=messages.scrollHeight;
+
+  setTimeout(()=>{
+
+    typing.remove();
+
+    let response;
+
+    /*
+      Enquiry request is checked before ordinary answers.
+      Once the enquiry has started, handleLead() controls the flow.
+    */
+    if(leadStage){
+      response=handleLead(text);
+    }else if(isHumanRequest(text)){
+      response=startHumanCallback(text);
+    }else if(isEnquiryRequest(text)){
+      response=startEnquiry(text);
+    }else{
+      response=answerCustomerQuestion(text);
+    }
+
+    bot(response);
+
+  },300);
 });
+
+
+/* ============================================================
+   OPTIONAL DEMO TEST DATA
+============================================================
+
+Try these:
+
+1. "What is Botox?"
+2. "How much is Botox?"
+3. "What is Profhilo?"
+4. "How much does Profhilo cost?"
+5. "Where are you located?"
+6. "What are your opening hours?"
+7. "Are you open on Saturday?"
+8. "What is your phone number?"
+9. "How can I contact you?"
+10. "Do I need a consultation?"
+11. "How do I book?"
+12. "Does HydraFacial hurt?"
+13. "How long does HydraFacial take?"
+14. "What treatment is good for pigmentation?"
+15. "What treatments do you offer?"
+16. "I'd like to make an enquiry"
+17. When asked for name, type:
+       "What is Botox?"
+    The bot should answer Botox and still ask for your name.
+============================================================ */
+
 </script>
 </body>
 </html>
