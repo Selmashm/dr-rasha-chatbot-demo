@@ -1877,8 +1877,7 @@ function handleLead(text){
         DEMO HOOK:
         This object can later be sent to Make/Zapier/your backend.
       */
-      console.log("DR RASHA DEMO LEAD",customer);
-
+      sendLeadToMake();
       return (
         "Perfect. I've recorded your preferred contact method as " +
         method +
@@ -1897,7 +1896,36 @@ function handleLead(text){
   return answerCustomerQuestion(text);
 }
 
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/a9ob5j19amks51pown8gbk2kn0upce8x";
 
+async function sendLeadToMake(){
+  try {
+    const data = new URLSearchParams();
+
+    data.append("name", customer.name || "");
+    data.append("email", customer.email || "");
+    data.append("phone", customer.phone || "");
+    data.append(
+      "preferredContactMethod",
+      customer.preferredContactMethod || ""
+    );
+    data.append("treatment", customer.treatment || "");
+    data.append("originalEnquiry", customer.originalEnquiry || "");
+
+    await fetch(MAKE_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: data.toString()
+    });
+
+    console.log("DR RASHA LEAD SENT TO MAKE", customer);
+
+  } catch (error) {
+    console.error("Could not send lead to Make:", error);
+  }
+}
 /* ============================================================
    MAIN QUESTION ENGINE
 ============================================================ */
