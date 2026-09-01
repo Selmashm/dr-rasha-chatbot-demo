@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Dr Rasha Clinic | AI Receptionist Demo</title>
 
   <style>
@@ -244,6 +245,7 @@
     }
 
     @media (max-width: 600px) {
+
       nav {
         display: none;
       }
@@ -258,16 +260,22 @@
         right: 18px;
         bottom: 18px;
       }
+
     }
   </style>
 </head>
 
 <body>
 
-  <div class="demo-label">AI RECEPTIONIST DEMO</div>
+  <div class="demo-label">
+    AI RECEPTIONIST DEMO
+  </div>
 
   <header>
-    <div class="logo">Dr Rasha Clinic</div>
+
+    <div class="logo">
+      Dr Rasha Clinic
+    </div>
 
     <nav>
       <span>About</span>
@@ -275,11 +283,17 @@
       <span>Consultations</span>
       <span>Contact</span>
     </nav>
+
   </header>
 
+
   <section class="hero">
+
     <div class="hero-content">
-      <div class="eyebrow">Aesthetic & Skin Clinic</div>
+
+      <div class="eyebrow">
+        Aesthetic & Skin Clinic
+      </div>
 
       <h1>
         Your skin.<br>
@@ -291,27 +305,41 @@
         designed around your individual needs.
       </p>
 
-      <a href="#" class="button">Book a consultation</a>
+      <a href="#" class="button">
+        Book a consultation
+      </a>
+
     </div>
+
   </section>
 
 
   <!-- CHAT BUTTON -->
 
-  <button class="chat-button" id="chatButton" aria-label="Open chat">
+  <button
+    class="chat-button"
+    id="chatButton"
+    aria-label="Open chat"
+  >
     💬
   </button>
 
 
   <!-- CHAT WINDOW -->
 
-  <div class="chat-window" id="chatWindow">
+  <div
+    class="chat-window"
+    id="chatWindow"
+  >
 
     <div class="chat-header">
 
-      <div class="avatar">DR</div>
+      <div class="avatar">
+        DR
+      </div>
 
       <div>
+
         <div class="chat-title">
           Dr Rasha Clinic Assistant
         </div>
@@ -319,12 +347,16 @@
         <div class="chat-status">
           AI Receptionist · Here to help
         </div>
+
       </div>
 
     </div>
 
 
-    <div class="messages" id="messages">
+    <div
+      class="messages"
+      id="messages"
+    >
 
       <div class="message bot">
         Hi 👋 Welcome to Dr Rasha Clinic. How can I help you today?
@@ -333,24 +365,39 @@
     </div>
 
 
-    <div class="choices" id="choices">
+    <div
+      class="choices"
+      id="choices"
+    >
 
-      <button class="choice" data-message="I'm interested in a treatment">
+      <button
+        class="choice"
+        data-message="I'm interested in a treatment"
+      >
         Treatment enquiry
       </button>
 
-      <button class="choice" data-message="I'd like to book a consultation">
+      <button
+        class="choice"
+        data-message="I'd like to book a consultation"
+      >
         Book consultation
       </button>
 
-      <button class="choice" data-message="I have a question">
+      <button
+        class="choice"
+        data-message="I have a question"
+      >
         Ask a question
       </button>
 
     </div>
 
 
-    <form class="input-area" id="chatForm">
+    <form
+      class="input-area"
+      id="chatForm"
+    >
 
       <input
         id="chatInput"
@@ -359,7 +406,10 @@
         autocomplete="off"
       >
 
-      <button class="send" type="submit">
+      <button
+        class="send"
+        type="submit"
+      >
         ➤
       </button>
 
@@ -370,133 +420,439 @@
 
   <script>
 
-    const chatButton = document.getElementById("chatButton");
-    const chatWindow = document.getElementById("chatWindow");
-    const messages = document.getElementById("messages");
-    const choices = document.getElementById("choices");
-    const chatForm = document.getElementById("chatForm");
-    const chatInput = document.getElementById("chatInput");
+    const chatButton =
+      document.getElementById("chatButton");
+
+    const chatWindow =
+      document.getElementById("chatWindow");
+
+    const messages =
+      document.getElementById("messages");
+
+    const choices =
+      document.getElementById("choices");
+
+    const chatForm =
+      document.getElementById("chatForm");
+
+    const chatInput =
+      document.getElementById("chatInput");
 
 
-    chatButton.addEventListener("click", function() {
+    /* --------------------------------
+       CUSTOMER INFORMATION
+    -------------------------------- */
 
-      if (chatWindow.style.display === "flex") {
-        chatWindow.style.display = "none";
-      } else {
-        chatWindow.style.display = "flex";
-        chatInput.focus();
+    let customer = {
+
+      name: "",
+      email: "",
+      phone: "",
+      treatment: "",
+      originalMessage: "",
+      preferredContactMethod: ""
+
+    };
+
+
+    let stage = "initial";
+
+
+    /* --------------------------------
+       OPEN / CLOSE CHAT
+    -------------------------------- */
+
+    chatButton.addEventListener(
+      "click",
+      function() {
+
+        if (
+          chatWindow.style.display === "flex"
+        ) {
+
+          chatWindow.style.display = "none";
+
+        } else {
+
+          chatWindow.style.display = "flex";
+
+          chatInput.focus();
+
+        }
+
       }
+    );
 
-    });
 
+    /* --------------------------------
+       ADD MESSAGE
+    -------------------------------- */
 
-    function addMessage(text, type) {
+    function addMessage(
+      text,
+      type
+    ) {
 
-      const message = document.createElement("div");
+      const message =
+        document.createElement("div");
 
-      message.classList.add("message");
-      message.classList.add(type);
+      message.classList.add(
+        "message",
+        type
+      );
 
       message.textContent = text;
 
       messages.appendChild(message);
 
-      messages.scrollTop = messages.scrollHeight;
+      messages.scrollTop =
+        messages.scrollHeight;
 
     }
 
 
-    function botReply(text) {
+    /* --------------------------------
+       SHOW BUTTON OPTIONS
+    -------------------------------- */
 
-      const lower = text.toLowerCase();
+    function showChoices(
+      options
+    ) {
 
-      let response =
-        "Thanks for getting in touch. I can help with general information about treatments and consultations. If your question requires clinical advice, I'll make sure the clinic team can assist you.";
+      choices.innerHTML = "";
 
-      if (lower.includes("profhilo")) {
+      options.forEach(
+        function(option) {
 
-        response =
-          "Profhilo is a skin-remodelling treatment using hyaluronic acid, designed to improve hydration, elasticity, texture and radiance. If you'd like to explore whether it is suitable for you, I can help with the next step.";
+          const button =
+            document.createElement("button");
 
-      }
+          button.className =
+            "choice";
 
-      else if (
-        lower.includes("book") ||
-        lower.includes("consultation")
-      ) {
+          button.textContent =
+            option;
 
-        response =
-          "Absolutely. I'd be happy to help with your consultation enquiry. Before we continue, what is your preferred way for the clinic to contact you — phone, email, text message or WhatsApp?";
+          button.onclick =
+            function() {
 
-      }
+              sendMessage(option);
 
-      else if (
-        lower.includes("price") ||
-        lower.includes("cost")
-      ) {
+            };
 
-        response =
-          "I'd be happy to help with information about the treatment. For current pricing, the clinic team can confirm the latest information and the appropriate next step for you.";
+          choices.appendChild(button);
 
-      }
-
-      else if (
-        lower.includes("preferred") ||
-        lower.includes("phone") ||
-        lower.includes("email") ||
-        lower.includes("whatsapp") ||
-        lower.includes("text")
-      ) {
-
-        response =
-          "Thank you. I've noted your preferred contact method. Could I also take your name, email address and phone number so the clinic can contact you if needed?";
-
-      }
-
-      addMessage(response, "bot");
+        }
+      );
 
     }
 
 
-    function sendMessage(text) {
+    /* --------------------------------
+       BOT QUESTION
+    -------------------------------- */
+
+    function ask(
+      text,
+      options = []
+    ) {
+
+      addMessage(
+        text,
+        "bot"
+      );
+
+      showChoices(options);
+
+    }
+
+
+    /* --------------------------------
+       SEND MESSAGE
+    -------------------------------- */
+
+    function sendMessage(
+      text
+    ) {
 
       text = text.trim();
 
-      if (!text) return;
+      if (!text) {
+        return;
+      }
 
-      addMessage(text, "user");
+      addMessage(
+        text,
+        "user"
+      );
 
       chatInput.value = "";
 
       choices.innerHTML = "";
 
-      setTimeout(function() {
-
-        botReply(text);
-
-      }, 500);
+      handleConversation(text);
 
     }
 
 
-    chatForm.addEventListener("submit", function(event) {
+    /* --------------------------------
+       CONVERSATION
+    -------------------------------- */
 
-      event.preventDefault();
+    function handleConversation(
+      text
+    ) {
 
-      sendMessage(chatInput.value);
+      const lower =
+        text.toLowerCase();
 
-    });
+
+      /* FIRST MESSAGE */
+
+      if (
+        stage === "initial"
+      ) {
+
+        customer.originalMessage =
+          text;
+
+        if (
+          lower.includes("profhilo")
+        ) {
+
+          customer.treatment =
+            "Profhilo";
+
+        }
+
+        else if (
+          lower.includes("botox")
+        ) {
+
+          customer.treatment =
+            "Botox";
+
+        }
+
+        else if (
+          lower.includes("filler")
+        ) {
+
+          customer.treatment =
+            "Dermal Fillers";
+
+        }
+
+        else {
+
+          customer.treatment =
+            "General enquiry";
+
+        }
 
 
-    choices.addEventListener("click", function(event) {
+        stage = "name";
 
-      if (event.target.classList.contains("choice")) {
 
-        sendMessage(event.target.dataset.message);
+        ask(
+          "Thank you for getting in touch with Dr Rasha Clinic. I'd be happy to help with your enquiry. May I take your full name?"
+        );
+
+        return;
 
       }
 
-    });
+
+      /* NAME */
+
+      if (
+        stage === "name"
+      ) {
+
+        customer.name =
+          text;
+
+        stage = "email";
+
+
+        ask(
+          "Thank you, " +
+          customer.name +
+          ". What is the best email address to contact you on?"
+        );
+
+        return;
+
+      }
+
+
+      /* EMAIL */
+
+      if (
+        stage === "email"
+      ) {
+
+        customer.email =
+          text;
+
+        stage = "phone";
+
+
+        ask(
+          "Thank you. What is your phone number?"
+        );
+
+        return;
+
+      }
+
+
+      /* PHONE */
+
+      if (
+        stage === "phone"
+      ) {
+
+        customer.phone =
+          text;
+
+        stage = "contact";
+
+
+        ask(
+          "How would you prefer the clinic to contact you?",
+          [
+            "Phone",
+            "Email",
+            "Text message",
+            "WhatsApp"
+          ]
+        );
+
+        return;
+
+      }
+
+
+      /* PREFERRED CONTACT */
+
+      if (
+        stage === "contact"
+      ) {
+
+        customer.preferredContactMethod =
+          text;
+
+        stage = "nextStep";
+
+
+        ask(
+          "Perfect. I've noted your preferred contact method as " +
+          text +
+          ". Would you like to book a consultation or would you like more information first?",
+          [
+            "Book a consultation",
+            "More information"
+          ]
+        );
+
+        return;
+
+      }
+
+
+      /* NEXT STEP */
+
+      if (
+        stage === "nextStep"
+      ) {
+
+        stage = "complete";
+
+
+        if (
+          lower.includes("book")
+        ) {
+
+          ask(
+            "Thank you. Your enquiry has been recorded. The clinic team will contact you using your preferred contact method to arrange your consultation."
+          );
+
+        }
+
+        else {
+
+          ask(
+            "Of course. Your enquiry has been recorded. The clinic team can provide further information and help you decide on the best next step."
+          );
+
+        }
+
+
+        /*
+          FOR THE DEMO:
+
+          The collected customer information
+          can be viewed in the browser console.
+
+          Later we will send this information
+          automatically to Make.
+        */
+
+        console.log(
+          "CUSTOMER LEAD",
+          customer
+        );
+
+        return;
+
+      }
+
+
+      /* COMPLETED */
+
+      if (
+        stage === "complete"
+      ) {
+
+        ask(
+          "Your enquiry has already been recorded. If you have another question, please type it below."
+        );
+
+      }
+
+    }
+
+
+    /* --------------------------------
+       TEXT INPUT
+    -------------------------------- */
+
+    chatForm.addEventListener(
+      "submit",
+      function(event) {
+
+        event.preventDefault();
+
+        sendMessage(
+          chatInput.value
+        );
+
+      }
+    );
+
+
+    /* --------------------------------
+       INITIAL BUTTONS
+    -------------------------------- */
+
+    showChoices(
+      [
+        "I'm interested in a treatment",
+        "I'd like to book a consultation",
+        "I have a question"
+      ]
+    );
 
   </script>
 
