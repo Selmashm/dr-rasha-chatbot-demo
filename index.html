@@ -1,860 +1,919 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Dr Rasha Clinic | AI Receptionist Demo</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f8f6f3;
-      color: #2d2926;
-    }
+<title>Dr Rasha Clinic | AI Receptionist Demo</title>
 
-    header {
-      background: white;
-      padding: 22px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #e8e2dc;
-    }
+<style>
 
-    .logo {
-      font-family: Georgia, serif;
-      font-size: 25px;
-      letter-spacing: 1px;
-    }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    nav {
-      display: flex;
-      gap: 28px;
-      font-size: 14px;
-      color: #625b55;
-    }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f8f6f3;
+  color: #2d2926;
+}
 
-    .hero {
-      min-height: 520px;
-      display: flex;
-      align-items: center;
-      padding: 70px 8%;
-      background: linear-gradient(110deg, #f7f2ed, #eee7df);
-    }
+header {
+  background: white;
+  padding: 22px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e8e2dc;
+}
 
-    .hero-content {
-      max-width: 650px;
-    }
+.logo {
+  font-family: Georgia, serif;
+  font-size: 25px;
+  letter-spacing: 1px;
+}
 
-    .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 12px;
-      margin-bottom: 18px;
-      color: #857466;
-    }
+nav {
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+  color: #625b55;
+}
 
-    h1 {
-      font-family: Georgia, serif;
-      font-size: clamp(42px, 6vw, 72px);
-      font-weight: normal;
-      line-height: 1.05;
-      margin-bottom: 24px;
-    }
+.hero {
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  padding: 70px 8%;
+  background: linear-gradient(110deg, #f7f2ed, #eee7df);
+}
 
-    .hero p {
-      font-size: 18px;
-      line-height: 1.7;
-      color: #665f59;
-      max-width: 560px;
-    }
+.hero-content {
+  max-width: 650px;
+}
 
-    .button {
-      display: inline-block;
-      margin-top: 30px;
-      background: #776554;
-      color: white;
-      padding: 15px 27px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 14px;
-    }
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 12px;
+  margin-bottom: 18px;
+  color: #857466;
+}
 
-    .demo-label {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: #2d2926;
-      color: white;
-      padding: 7px 11px;
-      border-radius: 20px;
-      font-size: 10px;
-      z-index: 20;
-    }
+h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: normal;
+  line-height: 1.05;
+  margin-bottom: 24px;
+}
 
-    /* CHAT BUTTON */
+.hero p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #665f59;
+  max-width: 560px;
+}
 
-    .chat-button {
-      position: fixed;
-      right: 25px;
-      bottom: 25px;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: none;
-      background: #776554;
-      color: white;
-      font-size: 27px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.18);
-      z-index: 10;
-    }
+.button {
+  display: inline-block;
+  margin-top: 30px;
+  background: #776554;
+  color: white;
+  padding: 15px 27px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+}
 
-    /* CHAT WINDOW */
+.demo-label {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #2d2926;
+  color: white;
+  padding: 7px 11px;
+  border-radius: 20px;
+  font-size: 10px;
+  z-index: 20;
+}
 
-    .chat-window {
-      position: fixed;
-      right: 25px;
-      bottom: 100px;
-      width: 370px;
-      max-width: calc(100vw - 30px);
-      height: 570px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.18);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 9;
-    }
+.chat-button {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: #776554;
+  color: white;
+  font-size: 27px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+  z-index: 10;
+}
 
-    .chat-header {
-      background: #776554;
-      color: white;
-      padding: 18px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+.chat-window {
+  position: fixed;
+  right: 25px;
+  bottom: 100px;
+  width: 370px;
+  max-width: calc(100vw - 30px);
+  height: 570px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.18);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9;
+}
 
-    .avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: white;
-      color: #776554;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: Georgia, serif;
-      font-weight: bold;
-    }
+.chat-header {
+  background: #776554;
+  color: white;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    .chat-title {
-      font-weight: bold;
-      font-size: 15px;
-    }
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: white;
+  color: #776554;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, serif;
+  font-weight: bold;
+}
 
-    .chat-status {
-      font-size: 11px;
-      opacity: 0.85;
-      margin-top: 3px;
-    }
+.chat-title {
+  font-weight: bold;
+  font-size: 15px;
+}
 
-    .messages {
-      flex: 1;
-      padding: 18px;
-      overflow-y: auto;
-      background: #fbfaf8;
-    }
+.chat-status {
+  font-size: 11px;
+  opacity: 0.85;
+  margin-top: 3px;
+}
 
-    .message {
-      max-width: 82%;
-      padding: 11px 14px;
-      margin-bottom: 12px;
-      border-radius: 15px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
+.messages {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  background: #fbfaf8;
+}
 
-    .bot {
-      background: #eee8e1;
-      border-bottom-left-radius: 4px;
-    }
+.message {
+  max-width: 82%;
+  padding: 11px 14px;
+  margin-bottom: 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+}
 
-    .user {
-      background: #776554;
-      color: white;
-      margin-left: auto;
-      border-bottom-right-radius: 4px;
-    }
+.bot {
+  background: #eee8e1;
+  border-bottom-left-radius: 4px;
+}
 
-    .choices {
-      padding: 10px 15px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      background: white;
-    }
+.user {
+  background: #776554;
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
 
-    .choice {
-      border: 1px solid #d9d0c8;
-      background: white;
-      border-radius: 20px;
-      padding: 9px 12px;
-      cursor: pointer;
-      font-size: 12px;
-      color: #514941;
-    }
+.choices {
+  padding: 10px 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  background: white;
+}
 
-    .choice:hover {
-      background: #f2ece6;
-    }
+.choice {
+  border: 1px solid #d9d0c8;
+  background: white;
+  border-radius: 20px;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #514941;
+}
 
-    .input-area {
-      display: flex;
-      border-top: 1px solid #e6e1dc;
-      padding: 10px;
-      background: white;
-      gap: 8px;
-    }
+.choice:hover {
+  background: #f2ece6;
+}
 
-    .input-area input {
-      flex: 1;
-      border: 1px solid #ddd6cf;
-      border-radius: 20px;
-      padding: 11px 14px;
-      outline: none;
-      font-size: 14px;
-    }
+.input-area {
+  display: flex;
+  border-top: 1px solid #e6e1dc;
+  padding: 10px;
+  background: white;
+  gap: 8px;
+}
 
-    .send {
-      width: 42px;
-      border: none;
-      border-radius: 50%;
-      background: #776554;
-      color: white;
-      cursor: pointer;
-    }
+.input-area input {
+  flex: 1;
+  border: 1px solid #ddd6cf;
+  border-radius: 20px;
+  padding: 11px 14px;
+  outline: none;
+  font-size: 14px;
+}
 
-    @media (max-width: 600px) {
+.send {
+  width: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #776554;
+  color: white;
+  cursor: pointer;
+}
 
-      nav {
-        display: none;
-      }
+@media (max-width: 600px) {
 
-      .chat-window {
-        right: 10px;
-        bottom: 90px;
-        height: 75vh;
-      }
+  nav {
+    display: none;
+  }
 
-      .chat-button {
-        right: 18px;
-        bottom: 18px;
-      }
+  .chat-window {
+    right: 10px;
+    bottom: 90px;
+    height: 75vh;
+  }
 
-    }
-  </style>
+  .chat-button {
+    right: 18px;
+    bottom: 18px;
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-  <div class="demo-label">
-    AI RECEPTIONIST DEMO
-  </div>
+<div class="demo-label">
+AI RECEPTIONIST DEMO
+</div>
 
-  <header>
 
-    <div class="logo">
-      Dr Rasha Clinic
-    </div>
+<header>
 
-    <nav>
-      <span>About</span>
-      <span>Treatments</span>
-      <span>Consultations</span>
-      <span>Contact</span>
-    </nav>
+<div class="logo">
+Dr Rasha Clinic
+</div>
 
-  </header>
+<nav>
+<span>About</span>
+<span>Treatments</span>
+<span>Consultations</span>
+<span>Contact</span>
+</nav>
 
+</header>
 
-  <section class="hero">
 
-    <div class="hero-content">
+<section class="hero">
 
-      <div class="eyebrow">
-        Aesthetic & Skin Clinic
-      </div>
+<div class="hero-content">
 
-      <h1>
-        Your skin.<br>
-        Your confidence.
-      </h1>
+<div class="eyebrow">
+Aesthetic & Skin Clinic
+</div>
 
-      <p>
-        Discover personalised aesthetic and skin treatments
-        designed around your individual needs.
-      </p>
+<h1>
+Your skin.<br>
+Your confidence.
+</h1>
 
-      <a href="#" class="button">
-        Book a consultation
-      </a>
+<p>
+Discover personalised aesthetic and skin treatments
+designed around your individual needs.
+</p>
 
-    </div>
+<a href="#" class="button">
+Book a consultation
+</a>
 
-  </section>
+</div>
 
+</section>
 
-  <!-- CHAT BUTTON -->
 
-  <button
-    class="chat-button"
-    id="chatButton"
-    aria-label="Open chat"
-  >
-    💬
-  </button>
+<button
+class="chat-button"
+id="chatButton"
+aria-label="Open chat">
 
+💬
 
-  <!-- CHAT WINDOW -->
+</button>
 
-  <div
-    class="chat-window"
-    id="chatWindow"
-  >
 
-    <div class="chat-header">
+<div
+class="chat-window"
+id="chatWindow">
 
-      <div class="avatar">
-        DR
-      </div>
 
-      <div>
+<div class="chat-header">
 
-        <div class="chat-title">
-          Dr Rasha Clinic Assistant
-        </div>
+<div class="avatar">
+DR
+</div>
 
-        <div class="chat-status">
-          AI Receptionist · Here to help
-        </div>
+<div>
 
-      </div>
+<div class="chat-title">
+Dr Rasha Clinic Assistant
+</div>
 
-    </div>
+<div class="chat-status">
+AI Receptionist · Here to help
+</div>
 
+</div>
 
-    <div
-      class="messages"
-      id="messages"
-    >
+</div>
 
-      <div class="message bot">
-        Hi 👋 Welcome to Dr Rasha Clinic. How can I help you today?
-      </div>
 
-    </div>
+<div
+class="messages"
+id="messages">
 
+<div class="message bot">
 
-    <div
-      class="choices"
-      id="choices"
-    >
+Hi 👋 Welcome to Dr Rasha Clinic. How can I help you today?
 
-      <button
-        class="choice"
-        data-message="I'm interested in a treatment"
-      >
-        Treatment enquiry
-      </button>
+</div>
 
-      <button
-        class="choice"
-        data-message="I'd like to book a consultation"
-      >
-        Book consultation
-      </button>
+</div>
 
-      <button
-        class="choice"
-        data-message="I have a question"
-      >
-        Ask a question
-      </button>
 
-    </div>
+<div
+class="choices"
+id="choices">
 
+<button
+class="choice"
+data-message="What treatments do you offer?">
 
-    <form
-      class="input-area"
-      id="chatForm"
-    >
+What treatments do you offer?
 
-      <input
-        id="chatInput"
-        type="text"
-        placeholder="Type your message..."
-        autocomplete="off"
-      >
+</button>
 
-      <button
-        class="send"
-        type="submit"
-      >
-        ➤
-      </button>
+<button
+class="choice"
+data-message="I'm interested in Profhilo">
 
-    </form>
+Profhilo
 
-  </div>
+</button>
 
+<button
+class="choice"
+data-message="I'm interested in Botox">
 
-  <script>
+Botox
 
-    const chatButton =
-      document.getElementById("chatButton");
+</button>
 
-    const chatWindow =
-      document.getElementById("chatWindow");
+<button
+class="choice"
+data-message="I'd like to book a consultation">
 
-    const messages =
-      document.getElementById("messages");
+Book consultation
 
-    const choices =
-      document.getElementById("choices");
+</button>
 
-    const chatForm =
-      document.getElementById("chatForm");
+</div>
 
-    const chatInput =
-      document.getElementById("chatInput");
 
+<form
+class="input-area"
+id="chatForm">
 
-    /* --------------------------------
-       CUSTOMER INFORMATION
-    -------------------------------- */
+<input
+id="chatInput"
+type="text"
+placeholder="Type your message..."
+autocomplete="off">
 
-    let customer = {
+<button
+class="send"
+type="submit">
 
-      name: "",
-      email: "",
-      phone: "",
-      treatment: "",
-      originalMessage: "",
-      preferredContactMethod: ""
+➤
 
-    };
+</button>
 
+</form>
 
-    let stage = "initial";
+</div>
 
 
-    /* --------------------------------
-       OPEN / CLOSE CHAT
-    -------------------------------- */
+<script>
 
-    chatButton.addEventListener(
-      "click",
-      function() {
 
-        if (
-          chatWindow.style.display === "flex"
-        ) {
+/* ================================
+   ELEMENTS
+================================ */
 
-          chatWindow.style.display = "none";
+const chatButton =
+document.getElementById("chatButton");
 
-        } else {
+const chatWindow =
+document.getElementById("chatWindow");
 
-          chatWindow.style.display = "flex";
+const messages =
+document.getElementById("messages");
 
-          chatInput.focus();
+const choices =
+document.getElementById("choices");
 
-        }
+const chatForm =
+document.getElementById("chatForm");
 
-      }
-    );
+const chatInput =
+document.getElementById("chatInput");
 
 
-    /* --------------------------------
-       ADD MESSAGE
-    -------------------------------- */
+/* ================================
+   CUSTOMER INFORMATION
+================================ */
 
-    function addMessage(
-      text,
-      type
-    ) {
+let customer = {
 
-      const message =
-        document.createElement("div");
+name: "",
+email: "",
+phone: "",
+treatment: "",
+originalMessage: "",
+preferredContactMethod: ""
 
-      message.classList.add(
-        "message",
-        type
-      );
+};
 
-      message.textContent = text;
 
-      messages.appendChild(message);
+/* ================================
+   CONVERSATION STATE
+================================ */
 
-      messages.scrollTop =
-        messages.scrollHeight;
+let stage = "chat";
 
-    }
 
+/* ================================
+   OPEN CHAT
+================================ */
 
-    /* --------------------------------
-       SHOW BUTTON OPTIONS
-    -------------------------------- */
+chatButton.addEventListener(
+"click",
+function() {
 
-    function showChoices(
-      options
-    ) {
+if (chatWindow.style.display === "flex") {
 
-      choices.innerHTML = "";
+chatWindow.style.display = "none";
 
-      options.forEach(
-        function(option) {
+} else {
 
-          const button =
-            document.createElement("button");
+chatWindow.style.display = "flex";
 
-          button.className =
-            "choice";
+chatInput.focus();
 
-          button.textContent =
-            option;
+}
 
-          button.onclick =
-            function() {
+});
 
-              sendMessage(option);
 
-            };
+/* ================================
+   ADD MESSAGE
+================================ */
 
-          choices.appendChild(button);
+function addMessage(text, type) {
 
-        }
-      );
+const message =
+document.createElement("div");
 
-    }
+message.classList.add(
+"message",
+type
+);
 
+message.textContent = text;
 
-    /* --------------------------------
-       BOT QUESTION
-    -------------------------------- */
+messages.appendChild(message);
 
-    function ask(
-      text,
-      options = []
-    ) {
+messages.scrollTop =
+messages.scrollHeight;
 
-      addMessage(
-        text,
-        "bot"
-      );
+}
 
-      showChoices(options);
 
-    }
+/* ================================
+   SHOW BUTTONS
+================================ */
 
+function showChoices(options) {
 
-    /* --------------------------------
-       SEND MESSAGE
-    -------------------------------- */
+choices.innerHTML = "";
 
-    function sendMessage(
-      text
-    ) {
+options.forEach(function(option) {
 
-      text = text.trim();
+const button =
+document.createElement("button");
 
-      if (!text) {
-        return;
-      }
+button.className =
+"choice";
 
-      addMessage(
-        text,
-        "user"
-      );
+button.textContent =
+option;
 
-      chatInput.value = "";
+button.onclick =
+function() {
 
-      choices.innerHTML = "";
+sendMessage(option);
 
-      handleConversation(text);
+};
 
-    }
+choices.appendChild(button);
 
+});
 
-    /* --------------------------------
-       CONVERSATION
-    -------------------------------- */
+}
 
-    function handleConversation(
-      text
-    ) {
 
-      const lower =
-        text.toLowerCase();
+/* ================================
+   BOT RESPONSE
+================================ */
 
+function bot(text, options = []) {
 
-      /* FIRST MESSAGE */
+addMessage(text, "bot");
 
-      if (
-        stage === "initial"
-      ) {
+showChoices(options);
 
-        customer.originalMessage =
-          text;
+}
 
-        if (
-          lower.includes("profhilo")
-        ) {
 
-          customer.treatment =
-            "Profhilo";
+/* ================================
+   SEND MESSAGE
+================================ */
 
-        }
+function sendMessage(text) {
 
-        else if (
-          lower.includes("botox")
-        ) {
+text = text.trim();
 
-          customer.treatment =
-            "Botox";
+if (!text) return;
 
-        }
+addMessage(text, "user");
 
-        else if (
-          lower.includes("filler")
-        ) {
+chatInput.value = "";
 
-          customer.treatment =
-            "Dermal Fillers";
+choices.innerHTML = "";
 
-        }
+handleMessage(text);
 
-        else {
+}
 
-          customer.treatment =
-            "General enquiry";
 
-        }
+/* ================================
+   MAIN CHAT LOGIC
+================================ */
 
+function handleMessage(text) {
 
-        stage = "name";
+const lower =
+text.toLowerCase();
 
 
-        ask(
-          "Thank you for getting in touch with Dr Rasha Clinic. I'd be happy to help with your enquiry. May I take your full name?"
-        );
+/* --------------------------------
+   COLLECTING NAME
+-------------------------------- */
 
-        return;
+if (stage === "name") {
 
-      }
+customer.name = text;
 
+stage = "email";
 
-      /* NAME */
+bot(
+"Thank you, " +
+customer.name +
+". What is the best email address to contact you on?"
+);
 
-      if (
-        stage === "name"
-      ) {
+return;
 
-        customer.name =
-          text;
+}
 
-        stage = "email";
 
+/* --------------------------------
+   COLLECTING EMAIL
+-------------------------------- */
 
-        ask(
-          "Thank you, " +
-          customer.name +
-          ". What is the best email address to contact you on?"
-        );
+if (stage === "email") {
 
-        return;
+customer.email = text;
 
-      }
+stage = "phone";
 
+bot(
+"Thank you. What is your phone number?"
+);
 
-      /* EMAIL */
+return;
 
-      if (
-        stage === "email"
-      ) {
+}
 
-        customer.email =
-          text;
 
-        stage = "phone";
+/* --------------------------------
+   COLLECTING PHONE
+-------------------------------- */
 
+if (stage === "phone") {
 
-        ask(
-          "Thank you. What is your phone number?"
-        );
+customer.phone = text;
 
-        return;
+stage = "contact";
 
-      }
+bot(
+"How would you prefer the clinic to contact you?",
+[
+"Phone",
+"Email",
+"Text message",
+"WhatsApp"
+]
+);
 
+return;
 
-      /* PHONE */
+}
 
-      if (
-        stage === "phone"
-      ) {
 
-        customer.phone =
-          text;
+/* --------------------------------
+   CONTACT METHOD
+-------------------------------- */
 
-        stage = "contact";
+if (stage === "contact") {
 
+customer.preferredContactMethod =
+text;
 
-        ask(
-          "How would you prefer the clinic to contact you?",
-          [
-            "Phone",
-            "Email",
-            "Text message",
-            "WhatsApp"
-          ]
-        );
+stage = "final";
 
-        return;
+bot(
+"Perfect. I've recorded your preferred contact method as " +
+text +
+". Would you like to book a consultation?",
+[
+"Yes, I'd like to book",
+"No, I have another question"
+]
+);
 
-      }
+return;
 
+}
 
-      /* PREFERRED CONTACT */
 
-      if (
-        stage === "contact"
-      ) {
+/* --------------------------------
+   FINAL BOOKING STEP
+-------------------------------- */
 
-        customer.preferredContactMethod =
-          text;
+if (stage === "final") {
 
-        stage = "nextStep";
+if (
+lower.includes("yes") ||
+lower.includes("book")
+) {
 
+bot(
+"Thank you. Your enquiry has been recorded. The clinic team will contact you using your preferred contact method to arrange the next step."
+);
 
-        ask(
-          "Perfect. I've noted your preferred contact method as " +
-          text +
-          ". Would you like to book a consultation or would you like more information first?",
-          [
-            "Book a consultation",
-            "More information"
-          ]
-        );
+console.log(
+"LEAD:",
+customer
+);
 
-        return;
+stage = "chat";
 
-      }
+} else {
 
+stage = "chat";
 
-      /* NEXT STEP */
+bot(
+"Of course. Please ask me anything about our treatments or consultations."
+);
 
-      if (
-        stage === "nextStep"
-      ) {
+}
 
-        stage = "complete";
+return;
 
+}
 
-        if (
-          lower.includes("book")
-        ) {
 
-          ask(
-            "Thank you. Your enquiry has been recorded. The clinic team will contact you using your preferred contact method to arrange your consultation."
-          );
+/* =================================
+   NORMAL CHAT / QUESTIONS
+================================= */
 
-        }
 
-        else {
+/* PROFHILO */
 
-          ask(
-            "Of course. Your enquiry has been recorded. The clinic team can provide further information and help you decide on the best next step."
-          );
+if (
+lower.includes("profhilo")
+) {
 
-        }
+customer.treatment = "Profhilo";
 
+bot(
+"Profhilo is a skin-remodelling treatment using hyaluronic acid. It is designed to improve skin hydration, elasticity, texture and radiance. If you'd like to know whether it may be suitable for you, a consultation with the clinic team would be the best next step.",
+[
+"How much does Profhilo cost?",
+"I'd like to book a consultation",
+"Ask another question"
+]
+);
 
-        /*
-          FOR THE DEMO:
+return;
 
-          The collected customer information
-          can be viewed in the browser console.
+}
 
-          Later we will send this information
-          automatically to Make.
-        */
 
-        console.log(
-          "CUSTOMER LEAD",
-          customer
-        );
+/* BOTOX */
 
-        return;
+if (
+lower.includes("botox") ||
+lower.includes("botulinum")
+) {
 
-      }
+customer.treatment = "Botox";
 
+bot(
+"Botox is a treatment that uses botulinum toxin to temporarily relax targeted muscles. It is commonly used for areas where muscle movement contributes to the appearance of lines and wrinkles. Suitability and treatment planning should be discussed with a qualified practitioner.",
+[
+"I'd like to book a consultation",
+"How much does Botox cost?",
+"Ask another question"
+]
+);
 
-      /* COMPLETED */
+return;
 
-      if (
-        stage === "complete"
-      ) {
+}
 
-        ask(
-          "Your enquiry has already been recorded. If you have another question, please type it below."
-        );
 
-      }
+/* CONSULTATION */
 
-    }
+if (
+lower.includes("consultation") ||
+lower.includes("book")
+) {
 
+customer.originalMessage = text;
 
-    /* --------------------------------
-       TEXT INPUT
-    -------------------------------- */
+stage = "name";
 
-    chatForm.addEventListener(
-      "submit",
-      function(event) {
+bot(
+"Absolutely. I can help with your consultation enquiry. Before I pass your details to the clinic, may I take your full name?"
+);
 
-        event.preventDefault();
+return;
 
-        sendMessage(
-          chatInput.value
-        );
+}
 
-      }
-    );
 
+/* PRICE */
 
-    /* --------------------------------
-       INITIAL BUTTONS
-    -------------------------------- */
+if (
+lower.includes("price") ||
+lower.includes("cost") ||
+lower.includes("how much")
+) {
 
-    showChoices(
-      [
-        "I'm interested in a treatment",
-        "I'd like to book a consultation",
-        "I have a question"
-      ]
-    );
+bot(
+"Treatment pricing can depend on the treatment, the areas being treated and your individual treatment plan. The clinic team can confirm the current price during your enquiry or consultation.",
+[
+"I'd like to book a consultation",
+"Ask another question"
+]
+);
 
-  </script>
+return;
+
+}
+
+
+/* CONSULTATION REQUIREMENT */
+
+if (
+lower.includes("do i need") &&
+lower.includes("consult")
+) {
+
+bot(
+"Yes. A consultation allows the clinic team to assess your needs, discuss your goals and determine the most appropriate treatment plan for you.",
+[
+"I'd like to book a consultation",
+"Ask another question"
+]
+);
+
+return;
+
+}
+
+
+/* TREATMENTS */
+
+if (
+lower.includes("treatment") ||
+lower.includes("what do you offer")
+) {
+
+bot(
+"The clinic provides a range of aesthetic and skin treatments. If you tell me which treatment you're interested in, I can provide general information and help you with the next step.",
+[
+"Profhilo",
+"Botox",
+"I'd like to book a consultation"
+]
+);
+
+return;
+
+}
+
+
+/* GENERAL QUESTION */
+
+if (
+lower.includes("question") ||
+lower.includes("help") ||
+lower.includes("what is") ||
+lower.includes("how does") ||
+lower.includes("can you")
+) {
+
+bot(
+"I'd be happy to help. You can ask me about treatments, consultations, pricing or booking. If your question requires individual clinical advice, I'll direct you to the clinic team.",
+[
+"Tell me about Profhilo",
+"Tell me about Botox",
+"I'd like to book a consultation"
+]
+);
+
+return;
+
+}
+
+
+/* UNKNOWN MESSAGE */
+
+bot(
+"Thanks for your message. I can help with general information about treatments, consultations and booking. What would you like to know?"
+);
+
+}
+
+
+/* ================================
+   FORM SUBMISSION
+================================ */
+
+chatForm.addEventListener(
+"submit",
+function(event) {
+
+event.preventDefault();
+
+sendMessage(
+chatInput.value
+);
+
+});
+
+
+</script>
 
 </body>
+
 </html>
